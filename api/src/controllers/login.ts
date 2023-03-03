@@ -3,6 +3,8 @@ import * as knex from 'knex'
 import * as crypto from 'crypto'
 import { UserModel } from '../models/user_model'
 import bodysinginSchema from '../schemas/bodysingin'
+import { _publicfunctions } from '../utils/helpers/functions.helper';  
+const Functions  = new _publicfunctions() 
 export default async function login(fastify: FastifyInstance) {
   const userModel = new UserModel()
   const db: knex = fastify.db
@@ -142,10 +144,10 @@ export default async function login(fastify: FastifyInstance) {
     //console.warn(`start_date `, start_date);
     let end_date: any = new Date(end_token * 1000);
     //console.warn(`end_date `, end_date);
-    let start_date_en: any = toEnDate(start_date);
-    let end_date_en: any =  toEnDate(end_date);
-    let start_date_thai: any =  toThaiDate(start_date);
-    let end_date_thai: any = toThaiDate(end_date);  
+    let start_date_en: any = Functions.toEnDate(start_date);
+    let end_date_en: any =  Functions.toEnDate(end_date);
+    let start_date_thai: any =  Functions.toThaiDate(start_date);
+    let end_date_thai: any = Functions.toThaiDate(end_date);  
     console.warn(`start_date_en `, start_date_en);
     console.warn(`end_date_en `, end_date_en);
     console.warn(`start_date_thai `, start_date_thai);
@@ -165,38 +167,5 @@ export default async function login(fastify: FastifyInstance) {
         }
     })
     return  // exit process     
-  }) 
-  function toThaiDate(date: any) { 
-      let monthNames = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."]; 
-        let year = date.getFullYear() + 543;
-        let month = monthNames[date.getMonth()];
-        let numOfDay = date.getDate();
-        let hour = date.getHours().toString().padStart(2, "0");
-        let minutes = date.getMinutes().toString().padStart(2, "0");
-        let second = date.getSeconds().toString().padStart(2, "0");
-      return `${numOfDay} ${month} ${year} ` +`${hour}:${minutes}:${second} น.`;
-  }
-  function toEnDate(date: any) { 
-      let monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May.", "Jun.", "Jul.", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."]; 
-      let monthNameslong = ["January", "February", "March.", "April", "May", "June", "July", "August", "September", "October", "November", "December"]; 
-      let year = date.getFullYear()+ 0;
-      let month = monthNameslong[date.getMonth()];
-      let numOfDay = date.getDate();
-      let hour = date.getHours().toString().padStart(2, "0");
-      let minutes = date.getMinutes().toString().padStart(2, "0");
-      let second = date.getSeconds().toString().padStart(2, "0");
-      return `${numOfDay} ${month} ${year} ` +`${hour}:${minutes}:${second}`;
-  }
-  function timeConverter(UNIX_timestamp:any){
-        var a = new Date(UNIX_timestamp * 1000);
-        var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-        var year = a.getFullYear();
-        var month = months[a.getMonth()];
-        var date = a.getDate();
-        var hour = a.getHours();
-        var min = a.getMinutes();
-        var sec = a.getSeconds();
-        var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
-        return time;
-  }   
+  })  
 }

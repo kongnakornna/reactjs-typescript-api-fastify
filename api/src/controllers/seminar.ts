@@ -17,6 +17,8 @@ import bodysingupSchema from '../schemas/bodysingup'
 import ActivateSchema from '../schemas/bodyActivate' 
 import queryActivateSchema from '../schemas/queryActivate' 
 var md5 = require('md5');
+import { _publicfunctions } from '../utils/helpers/functions.helper';  
+const Functions  = new _publicfunctions() 
 export default async function seminar(fastify: FastifyInstance) {
         const userModel = new UserModel(); 
         const File_Model = new FileModel(); 
@@ -67,11 +69,10 @@ export default async function seminar(fastify: FastifyInstance) {
                 reply.header('Access-Control-Allow-Methods', 'POST'); 
                 const headers: any = request.headers || null;
                 const body: any = request.body;
-                const getchar: string = getRandomchar(16);
-                const today = new Date()
-                const dates = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
-                const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds()
-                const datetime = dates + ' ' + time
+                const getchar: string =  Functions.getRandomchar(16);
+                const today = new Date() 
+                const datetime: string =  Functions.timeConvertermas(today);
+                console.warn(`datetime=> `, datetime); 
                 const seminar_title_id: string = body.seminar_title_id;
                 if (seminar_title_id === null) {
                     reply.code(401).send({
@@ -86,6 +87,16 @@ export default async function seminar(fastify: FastifyInstance) {
                 const active_datatime: string = body.active_datatime|| 1;
                 const status_active: string = body.status_active|| 1;
                 const period_id: string = body.period_id;
+                if (period_id === null) {
+                    reply.code(401).send({
+                                            response: { 
+                                                message: "Error period_id is null please input period_id!", 
+                                                status: 0,  
+                                                StatusCode: '401',
+                                            }
+                                        }) 
+                    return  // exit process  
+                }  
                 const issued_at=Date.now()
                 const timestamp = Date.now()
                 /********************************/
@@ -100,27 +111,15 @@ export default async function seminar(fastify: FastifyInstance) {
                 console.warn(`tokendecode=>`, tokendecode);
                 console.warn(`count=> `, tokendecode.lengt); 
                 var data: any = tokendecode; 
-                const seminar_id: number = data['createsignin']['seminar_id'];
-                var email: number = data['createsignin']['email'];
+                const seminar_id: number = data['seminar_id'];
+                var email: string = data['email'];
                 const validation_input: any = {}                          
                 validation_input.seminar_title_id = seminar_title_id; 
                 validation_input.period_id = period_id;  
                 validation_input.seminar_id = seminar_id;
-                console.warn(`validation_input=> `, validation_input); 
-                reply.code(401).send({
-                                            response: { 
-                                                message: "Test!", 
-                                                status: 0,  
-                                                StatusCode: '200',
-                                                body:body,
-                                                tokendecode:tokendecode,
-                                            }
-                                        }) 
-                return  // exit process   
-                
-                const validation_period_id: any = await Seminar_Model.check_validate(db,seminar_title_id,seminar_id,period_id);
-                console.warn(`validation_period_id_count=> `, validation_period_id.lengt); 
-                if (validation_period_id.length > 0) {
+                validation_input.email = email; 
+                const validation_email: any = await Seminar_Model.check_validate(db,seminar_title_id,seminar_id,period_id);
+                if (validation_email.length > 0) {
                                 reply.code(401).send({
                                                         response: { 
                                                         message: "Register Duplicate , Please change seminar seminar_title_id and seminar_id and period_id", 
@@ -129,17 +128,27 @@ export default async function seminar(fastify: FastifyInstance) {
                                                         }
                                                     }) 
                                 return  // exit process  
-                }
+                } 
                 try { 
                         const datainput: any = {}                          
                         datainput.seminar_title_id = seminar_title_id;
-                        datainput.datetime = datetime;
+                        datainput.datetime =  Functions.timeConvertermas(today);
                         datainput.period_id = period_id;  
-                        datainput.seminar_id = seminar_id;
-                        datainput.active_datatime = active_datatime;
-                        datainput.status_active = status_active;
+                        datainput.seminar_id = seminar_id; 
+                        datainput.status_active = status_active; 
                         const rs: any = await Seminar_Model.seminar_register(db, datainput)
-                        let idxs: any = await usersNarratorModel.last_id(db);
+                        let idxs: any = await usersNarratorModel.last_id(db); 
+                        reply.code(200).send({
+                                                response: { 
+                                                    message: "Register datainput",
+                                                    status: 1,   
+                                                    data:datainput,
+                                                    rs:rs, idxs:idxs,
+                                                    StatusCode: '200',
+                                                }
+                                    }) 
+                        return  // exit process  
+                        
                         const luser: any = idxs[0]
                         console.log("luser", luser); 
                         let idx: Number = luser.id;
@@ -185,8 +194,7 @@ export default async function seminar(fastify: FastifyInstance) {
                         return  // exit process   
                 }
         }) 
-       // fastify.get('/usersseminarlist', {preValidation: [fastify.authenticate]}, async (request: FastifyRequest, reply: FastifyReply) => {
-        fastify.get('/usersseminarlist', async (request: FastifyRequest, reply: FastifyReply) => {
+        fastify.get('/usersseminarlist', {preValidation: [fastify.authenticate]}, async (request: FastifyRequest, reply: FastifyReply) => {
              /******************************/
                 reply.header("Access-Control-Allow-Origin", "*");  
                 reply.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); 
@@ -220,17 +228,6 @@ export default async function seminar(fastify: FastifyInstance) {
                     filter.keyword=keyword;                    
                     filter.isCount=1;
                     const rows = await Seminar_Model.filter_title_users_seminar(db, filter);
-                    reply.code(200).send({
-                                        response: {
-                                            result: "users seminar list!",
-                                            message: "Result,Data successful!", 
-                                            status: 1, 
-                                            data: null, 
-                                            StatusCode: '200',
-                                        },
-                                        input_query:query, 
-                                    })   
-                        return  // exit process  
                     const getCount = rows
                     console.log("getCount", getCount) 
                     const row: number = rows.length; // count array 
@@ -331,135 +328,5 @@ export default async function seminar(fastify: FastifyInstance) {
                                     }) 
                         return  // exit process   
                 }        
-        }) 
-        function toThaiDate(date: any) { 
-            let monthNames = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."]; 
-                let year = date.getFullYear() + 543;
-                let month = monthNames[date.getMonth()];
-                let numOfDay = date.getDate();
-                let hour = date.getHours().toString().padStart(2, "0");
-                let minutes = date.getMinutes().toString().padStart(2, "0");
-                let second = date.getSeconds().toString().padStart(2, "0");
-            return `${numOfDay} ${month} ${year} ` +`${hour}:${minutes}:${second} น.`;
-        }
-        function toEnDate(date: any) { 
-            let monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May.", "Jun.", "Jul.", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."]; 
-            let monthNameslong = ["January", "February", "March.", "April", "May", "June", "July", "August", "September", "October", "November", "December"]; 
-            let year = date.getFullYear()+ 0;
-            let month = monthNameslong[date.getMonth()];
-            let numOfDay = date.getDate();
-            let hour = date.getHours().toString().padStart(2, "0");
-            let minutes = date.getMinutes().toString().padStart(2, "0");
-            let second = date.getSeconds().toString().padStart(2, "0");
-            return `${numOfDay} ${month} ${year} ` +`${hour}:${minutes}:${second}`;
-        }
-        function timeConverter(UNIX_timestamp:any){
-                var a = new Date(UNIX_timestamp * 1000);
-                var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-                var year = a.getFullYear();
-                var month = months[a.getMonth()];
-                var date = a.getDate();
-                var hour = a.getHours();
-                var min = a.getMinutes();
-                var sec = a.getSeconds();
-                var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
-                return time;
-        }  
-        function toTimestamp(strDate: any){ var datum = Date.parse(strDate); return datum/1000;}
-        function getRandomString(length: any) {
-                //var randomChars: any = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+';
-                var randomChars: any =  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#';
-                var result: any =  ''
-                for ( var i = 0; i < length; i++ ) {
-                    result += randomChars.charAt(Math.floor(Math.random() * randomChars.length))
-                }
-                return result
-        }
-        function getRandomchar(length: any) { 
-                var randomChars: any =  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-                var result: any =  ''
-                for ( var i = 0; i < length; i++ ) {
-                    result += randomChars.charAt(Math.floor(Math.random() * randomChars.length))
-                }
-                return result
-        }
-        function getRandomint(length: any) { 
-                var randomChars: any =  '0123456789';
-                var result: any =  ''
-                for ( var i = 0; i < length; i++ ) {
-                    result += randomChars.charAt(Math.floor(Math.random() * randomChars.length))
-                }
-                return result
-        }
-        function getRandomsrtsmall(length: any) { 
-                var randomChars: any =  'abcdefghijklmnopqrstuvwxyz';
-                var result: any =  ''
-                for ( var i = 0; i < length; i++ ) {
-                    result += randomChars.charAt(Math.floor(Math.random() * randomChars.length))
-                }
-                return result
-        }
-        function getRandomsrtbig(length: any) { 
-                var randomChars: any =  'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-                var result: any =  ''
-                for ( var i = 0; i < length; i++ ) {
-                    result += randomChars.charAt(Math.floor(Math.random() * randomChars.length))
-                }
-                return result
-        }
-        function passwordValidator(inputtxt: any){ 
-            var paswd :any= "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})";
-            if(inputtxt.match(paswd)){  
-                console.log('Your validate password  Correct, try another...:'+inputtxt);
-                return true;
-            }else{  
-                    console.log('You validate password Wrong...:'+inputtxt);
-                return false;
-            }
-        }  
-        function generatePassword(passwordLength: any) {
-            var numberChars = "0123456789";
-            var upperChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            var lowerChars = "abcdefghijklmnopqrstuvwxyz";
-            var vaChars = "!@#$%^&*";
-            var allChars = numberChars + upperChars + lowerChars+ vaChars;
-            var randPasswordArray = Array(passwordLength);
-            randPasswordArray[0] = numberChars;
-            randPasswordArray[1] = upperChars;
-            randPasswordArray[2] = lowerChars;
-            randPasswordArray = randPasswordArray.fill(allChars, 3);
-            return shuffleArray(randPasswordArray.map(function(x) { return x[Math.floor(Math.random() * x.length)] })).join('');
-        }
-        function shuffleArray(array: any) {
-            for (var i = array.length - 1; i > 0; i--) {
-            var j = Math.floor(Math.random() * (i + 1));
-            var temp = array[i];
-            array[i] = array[j];
-            array[j] = temp;
-            }
-            return array;
-        } 
-        var emailRegex = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
-        function isemailValid(email: any) {
-            if (!email)
-                return false;
-
-            if(email.length>254)
-                return false;
-
-            var valid = emailRegex.test(email);
-            if(!valid)
-                return false;
-
-            // Further checking of some things regex can't handle
-            var parts = email.split("@");
-            if(parts[0].length>64)
-                return false;
-
-            var domainParts = parts[1].split(".");
-            if(domainParts.some(function(part: any) { return part.length>63; }))
-                return false;
-
-            return true;
-        }
+        })  
 } 

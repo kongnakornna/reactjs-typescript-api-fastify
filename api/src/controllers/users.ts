@@ -9,6 +9,8 @@ import registerSchema from '../schemas/registerSchema' // {schema: registerSchem
 import bodysingupSchema from '../schemas/bodysingup'
 import ActivateSchema from '../schemas/bodyActivate' 
 import queryActivateSchema from '../schemas/queryActivate' 
+import { _publicfunctions } from '../utils/helpers/functions.helper';  
+const Functions  = new _publicfunctions() 
 var md5 = require('md5');
 export default async function user(fastify: FastifyInstance) {
 const userModel = new UserModel()
@@ -178,7 +180,7 @@ const APIKEY:any = env.API_KEY
         reply.header('Access-Control-Allow-Methods', 'POST'); 
         const headers: any = request.headers || null;
         const body: any = request.body;
-        const getchar: string = getRandomchar(16);
+        const getchar: string = Functions.getRandomchar(16);
         const firstname: string = body.firstname;
         const lastname: string = body.lastname;
         const fullname: string = body.fullname;
@@ -189,13 +191,11 @@ const APIKEY:any = env.API_KEY
         const password: string = body.password;
         const emails: string = body.email; 
         const today = new Date()
-        const dates = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
-        const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds()
-        const dateTime = dates + ' ' + time
+        const dateTime = Functions.timeConvertermas(today); 
         const issued_at=Date.now()
         const timestamp = Date.now()
         /********************************/
-        const email: any = isEemailValid(emails);
+        const email: any = Functions.isemailValid(emails);
         if (email === false) {
             reply.code(401).send({
                                     response: { 
@@ -230,7 +230,7 @@ const APIKEY:any = env.API_KEY
                     return  // exit process  
         }
       
-      const passwd:any = passwordValidator(password);
+      const passwd:any =  Functions.passwordValidator(password);
       if (passwd === false) {
           reply.code(401).send({
                                   response: { 
@@ -369,7 +369,7 @@ const APIKEY:any = env.API_KEY
     const body: any = request.body;
     const params: any = request.params || null;  
     const apikey : any = request.headers.apikey || null;
-    const getchar: string = getRandomchar(16);
+    const getchar: string =  Functions.getRandomchar(16);
     /*
     console.log("headers", headers);  
     console.log("apikey", apikey);
@@ -420,7 +420,7 @@ const APIKEY:any = env.API_KEY
     const body: any = request.body;
     const params: any = request.params || null;  
     const apikey : any = request.headers.apikey || null;
-    const getchar: string = getRandomchar(16);
+    const getchar: string =  Functions.getRandomchar(16);
     /*
     console.log("headers", headers);  
     console.log("apikey", apikey);
@@ -487,10 +487,10 @@ const APIKEY:any = env.API_KEY
     //console.warn(`start_date `, start_date);
     let end_date: any = new Date(end_token * 1000);
     //console.warn(`end_date `, end_date);
-    let start_date_en: any = toEnDate(start_date);
-    let end_date_en: any =  toEnDate(end_date);
-    let start_date_thai: any =  toThaiDate(start_date);
-    let end_date_thai: any = toThaiDate(end_date);  
+    let start_date_en: any =  Functions.toEnDate(start_date);
+    let end_date_en: any =   Functions.toEnDate(end_date);
+    let start_date_thai: any =   Functions.toThaiDate(start_date);
+    let end_date_thai: any =  Functions.toThaiDate(end_date);  
     console.warn(`start_date_en `, start_date_en);
     console.warn(`end_date_en `, end_date_en);
     console.warn(`start_date_thai `, start_date_thai);
@@ -594,10 +594,10 @@ const APIKEY:any = env.API_KEY
     //console.warn(`start_date `, start_date);
     let end_date: any = new Date(end_token * 1000);
     //console.warn(`end_date `, end_date);
-    let start_date_en: any = toEnDate(start_date);
-    let end_date_en: any =  toEnDate(end_date);
-    let start_date_thai: any =  toThaiDate(start_date);
-    let end_date_thai: any = toThaiDate(end_date);  
+    let start_date_en: any = Functions.toEnDate(start_date);
+    let end_date_en: any =  Functions.toEnDate(end_date);
+    let start_date_thai: any =  Functions.toThaiDate(start_date);
+    let end_date_thai: any = Functions.toThaiDate(end_date);  
     console.warn(`start_date_en=>`, start_date_en);
     console.warn(`end_date_en=>`, end_date_en);
     console.warn(`start_date_thai=>`, start_date_thai);
@@ -608,10 +608,8 @@ const APIKEY:any = env.API_KEY
     var profile_id: any = data['createsignin']['profile_id'];
     var user_id: number = data['createsignin']['user_id'];
     var username: number = data['createsignin']['username'];
-    const today = new Date()
-    const dates = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
-    const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds()
-    const dateTime = dates + ' ' + time
+    const today = new Date() 
+    const dateTime = Functions.timeConvertermas(today)
     const inputupdate = {
                         status: 1, 
                         isActive: 1, 
@@ -785,10 +783,10 @@ const APIKEY:any = env.API_KEY
     //console.warn(`start_date `, start_date);
     let end_date: any = new Date(end_token * 1000);
     //console.warn(`end_date `, end_date);
-    let start_date_en: any = toEnDate(start_date);
-    let end_date_en: any =  toEnDate(end_date);
-    let start_date_thai: any =  toThaiDate(start_date);
-    let end_date_thai: any = toThaiDate(end_date);  
+    let start_date_en: any = Functions.toEnDate(start_date);
+    let end_date_en: any =  Functions.toEnDate(end_date);
+    let start_date_thai: any =  Functions.toThaiDate(start_date);
+    let end_date_thai: any = Functions.toThaiDate(end_date);  
     //console.warn(`start_date_en `, start_date_en);
     //console.warn(`end_date_en `, end_date_en);
     //console.warn(`start_date_thai `, start_date_thai);
@@ -815,135 +813,5 @@ const APIKEY:any = env.API_KEY
         }
     })
     return  // exit process     
-  })  
-  function toThaiDate(date: any) { 
-      let monthNames = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."]; 
-        let year = date.getFullYear() + 543;
-        let month = monthNames[date.getMonth()];
-        let numOfDay = date.getDate();
-        let hour = date.getHours().toString().padStart(2, "0");
-        let minutes = date.getMinutes().toString().padStart(2, "0");
-        let second = date.getSeconds().toString().padStart(2, "0");
-      return `${numOfDay} ${month} ${year} ` +`${hour}:${minutes}:${second} น.`;
-  }
-  function toEnDate(date: any) { 
-      let monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May.", "Jun.", "Jul.", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."]; 
-      let monthNameslong = ["January", "February", "March.", "April", "May", "June", "July", "August", "September", "October", "November", "December"]; 
-      let year = date.getFullYear()+ 0;
-      let month = monthNameslong[date.getMonth()];
-      let numOfDay = date.getDate();
-      let hour = date.getHours().toString().padStart(2, "0");
-      let minutes = date.getMinutes().toString().padStart(2, "0");
-      let second = date.getSeconds().toString().padStart(2, "0");
-      return `${numOfDay} ${month} ${year} ` +`${hour}:${minutes}:${second}`;
-  }
-  function timeConverter(UNIX_timestamp:any){
-        var a = new Date(UNIX_timestamp * 1000);
-        var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-        var year = a.getFullYear();
-        var month = months[a.getMonth()];
-        var date = a.getDate();
-        var hour = a.getHours();
-        var min = a.getMinutes();
-        var sec = a.getSeconds();
-        var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
-        return time;
-  }  
-  function toTimestamp(strDate: any){ var datum = Date.parse(strDate); return datum/1000;}
-  function getRandomString(length: any) {
-        //var randomChars: any = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+';
-        var randomChars: any =  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#';
-        var result: any =  ''
-        for ( var i = 0; i < length; i++ ) {
-            result += randomChars.charAt(Math.floor(Math.random() * randomChars.length))
-        }
-        return result
-  }
-  function getRandomchar(length: any) { 
-        var randomChars: any =  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        var result: any =  ''
-        for ( var i = 0; i < length; i++ ) {
-            result += randomChars.charAt(Math.floor(Math.random() * randomChars.length))
-        }
-        return result
-  }
-  function getRandomint(length: any) { 
-        var randomChars: any =  '0123456789';
-        var result: any =  ''
-        for ( var i = 0; i < length; i++ ) {
-            result += randomChars.charAt(Math.floor(Math.random() * randomChars.length))
-        }
-        return result
-  }
-  function getRandomsrtsmall(length: any) { 
-        var randomChars: any =  'abcdefghijklmnopqrstuvwxyz';
-        var result: any =  ''
-        for ( var i = 0; i < length; i++ ) {
-            result += randomChars.charAt(Math.floor(Math.random() * randomChars.length))
-        }
-        return result
-  }
-  function getRandomsrtbig(length: any) { 
-        var randomChars: any =  'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        var result: any =  ''
-        for ( var i = 0; i < length; i++ ) {
-            result += randomChars.charAt(Math.floor(Math.random() * randomChars.length))
-        }
-        return result
-  }
-  function passwordValidator(inputtxt: any){ 
-    var paswd :any= "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})";
-    if(inputtxt.match(paswd)){  
-        console.log('Your validate password  Correct, try another...:'+inputtxt);
-        return true;
-    }else{  
-            console.log('You validate password Wrong...:'+inputtxt);
-        return false;
-    }
-  }  
-  function generatePassword(passwordLength: any) {
-      var numberChars = "0123456789";
-      var upperChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-      var lowerChars = "abcdefghijklmnopqrstuvwxyz";
-      var vaChars = "!@#$%^&*";
-      var allChars = numberChars + upperChars + lowerChars+ vaChars;
-      var randPasswordArray = Array(passwordLength);
-      randPasswordArray[0] = numberChars;
-      randPasswordArray[1] = upperChars;
-      randPasswordArray[2] = lowerChars;
-      randPasswordArray = randPasswordArray.fill(allChars, 3);
-      return shuffleArray(randPasswordArray.map(function(x) { return x[Math.floor(Math.random() * x.length)] })).join('');
-  }
-  function shuffleArray(array: any) {
-    for (var i = array.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var temp = array[i];
-      array[i] = array[j];
-      array[j] = temp;
-    }
-    return array;
-  } 
-  var eemailRegex = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
-  function isEemailValid(eemail: any) {
-      if (!eemail)
-          return false;
-
-      if(eemail.length>254)
-          return false;
-
-      var valid = eemailRegex.test(eemail);
-      if(!valid)
-          return false;
-
-      // Further checking of some things regex can't handle
-      var parts = eemail.split("@");
-      if(parts[0].length>64)
-          return false;
-
-      var domainParts = parts[1].split(".");
-      if(domainParts.some(function(part: any) { return part.length>63; }))
-          return false;
-
-      return true;
-  }
+  })   
 } 

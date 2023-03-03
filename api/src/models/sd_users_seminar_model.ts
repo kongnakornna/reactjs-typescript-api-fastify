@@ -15,10 +15,15 @@ export class SdusersSeminarModel {
         return db('sd_users_seminar')
         .where('seminar_id', seminar_id)
         .update(data)
-    }
+    } 
    login(db: knex, email: any, password: any) {
        return db('sd_users_seminar')
-            .select('seminar_id,firstname,lastname,phonenumber,email,create,status,active,activedate')
+            .select('seminar_id')
+            .select('firstname')
+            .select('lastname')
+            .select('phonenumber')
+            .select('email')
+            .select('status')
             .where('email', email)
             .andWhere('password', password)
     }
