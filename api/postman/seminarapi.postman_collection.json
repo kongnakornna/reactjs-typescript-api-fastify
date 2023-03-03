@@ -1,0 +1,272 @@
+{
+	"info": {
+		"_postman_id": "fbe1f2b1-4c9b-4b81-a855-15e8ea59d9b7",
+		"name": "seminarapi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "367727"
+	},
+	"item": [
+		{
+			"name": "index",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3002/seminarapi/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3002",
+					"path": [
+						"seminarapi",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createtoken",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "Seminar@5371@@",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "apikey",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3002/seminarapi/createtoken",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3002",
+					"path": [
+						"seminarapi",
+						"createtoken"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "verifytoken",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVzaWduaW4iOnsidXNlcl9pZCI6MSwidXNlcm5hbWUiOiJrb25nbmFrb3JubmEiLCJmaXJzdG5hbWUiOiJrb25nbmFrb3JuIiwic3RhdHVzIjowLCJwcm9maWxlX2lkIjoiNTVhNTQwMDhhZDFiYTU4OWFhMjEwZDI2MjljMWRmNDEiLCJkYXRlIjoiMjAyMy0yLTIzIDg6NDk6MTkifSwiaWF0IjoxNjc3MTE2OTYyLCJleHAiOjE2Nzk3MDg5NjJ9.vQTuKNrvOTSiNEecd6tqEx2tdwRwYhXKKtY0sYjG1UI",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3002/seminarapi/verifytoken",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3002",
+					"path": [
+						"seminarapi",
+						"verifytoken"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "activate",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "code",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVzaWduaW4iOnsidXNlcl9pZCI6MSwidXNlcm5hbWUiOiJrb25nbmFrb3JubmEiLCJmaXJzdG5hbWUiOiJrb25nbmFrb3JuIiwic3RhdHVzIjowLCJwcm9maWxlX2lkIjoiNTVhNTQwMDhhZDFiYTU4OWFhMjEwZDI2MjljMWRmNDEiLCJkYXRlIjoiMjAyMy0yLTI0IDI6NjozMSJ9LCJpYXQiOjE2NzcxNzkxOTEsImV4cCI6MTcwODcxNTE5MX0.1Eu4-VIqq7w_JkXNRDCGpJZqi9TruRK9_JBbBJBWMH8",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3002/seminarapi/users/activate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3002",
+					"path": [
+						"seminarapi",
+						"users",
+						"activate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "private",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJnZXRjaGFyIjoiOFNzUHF0T3Vsa0VRdWhJYiIsImlhdCI6MTY3NzA4NTI4OCwiZXhwIjoxNzA4NjIxMjg4fQ.kpygK7iSusyECIwZCMiXe7NTWTsQf7gdYuHy4EXqCRw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3002/seminarapi/private",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3002",
+					"path": [
+						"seminarapi",
+						"private"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user/singin",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "kongnakornna",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "Na@5371@#@#",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3002/seminarapi/users/singin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3002",
+					"path": [
+						"seminarapi",
+						"users",
+						"singin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user/singup",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "email",
+							"value": "kongnakornna@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "kongnakornna",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "Na@5371@#@#",
+							"type": "text"
+						},
+						{
+							"key": "firstname",
+							"value": "kongnakorn",
+							"type": "text"
+						},
+						{
+							"key": "lastname",
+							"value": "jantakun",
+							"type": "text"
+						},
+						{
+							"key": "fullname",
+							"value": "Nakorn",
+							"type": "text"
+						},
+						{
+							"key": "nickname",
+							"value": "Na",
+							"type": "text"
+						},
+						{
+							"key": "gender",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "remark",
+							"value": "dev",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3002/seminarapi/users/singup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3002",
+					"path": [
+						"seminarapi",
+						"users",
+						"singup"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
