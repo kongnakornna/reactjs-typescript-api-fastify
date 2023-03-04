@@ -271,7 +271,7 @@ export default async function seminar(fastify: FastifyInstance) {
                     filter1.end=end || null; 
                     filter1.order=orderBy || null; 
                     filter1.pages=page || 1; 
-                    filter1.sizepsge=perpage || 50; 
+                    filter1.sizepsge=perpage || 10; 
                     filter1.isCount=0;
                     const ResultArray: any = await Seminar_Model.filter_title_users_seminar(db, filter1);   
                     let tempData = [];
@@ -295,6 +295,23 @@ export default async function seminar(fastify: FastifyInstance) {
                         const phonenumber_seminar: string = ResultArray[key].phonenumber_seminar;
                         const email_seminar: string = ResultArray[key].email_seminar;
                         const fullname_semina: string = ResultArray[key].fullname_semina;  
+                        const filter2: any = {}  
+                        filter2.title_id = title_id || null;  
+                        const detail: any = await Seminar_Model.seminar_detail(db, filter2); 
+                        let tempDataDetail = [];
+                        for (const [key, value] of Object.entries(detail)) { 
+                            const idx: number = detail[key].idx; 
+                            const detail_name:string = detail[key].detail_name;
+                            const startdate: string = Functions.timeConvertermas(detail[key].startdate);  
+                            const enddate: string = Functions.timeConvertermas(detail[key].enddate);   
+                            const datas = {  
+                                        idx: idx, 
+                                        detail_name: detail_name, 
+                                        startdate: startdate, 
+                                        enddate: enddate,  
+                                    } 
+                            tempDataDetail.push(datas); 
+                        }
                         const data = { 
                                     seminar_id : seminar_id,
                                     title_id: title_id, 
@@ -314,6 +331,7 @@ export default async function seminar(fastify: FastifyInstance) {
                                     phonenumber_seminar: phonenumber_seminar, 
                                     email_seminar: email_seminar, 
                                     fullname_semina: fullname_semina, 
+                                    detail: tempDataDetail, 
                                 } 
                         tempData.push(data); 
                     }
@@ -391,7 +409,7 @@ export default async function seminar(fastify: FastifyInstance) {
                     const limit = body.limit;  
                     const status =body.status || 1;
                     const page: number = Number(query?.page) || 1;
-                    const perpage: number = Number(query?.perpage) || 20;            
+                    const perpage: number = Number(query?.perpage) || 10;            
                     const filter: any = {} 
                     filter.seminar_id=seminar_id || null; 
                     filter.title_id = title_id || null; 
@@ -458,6 +476,23 @@ export default async function seminar(fastify: FastifyInstance) {
                         const phonenumber_seminar: string = ResultArray[key].phonenumber_seminar;
                         const email_seminar: string = ResultArray[key].email_seminar;
                         const fullname_semina: string = ResultArray[key].fullname_semina;  
+                        const filter2: any = {}  
+                        filter2.title_id = title_id || null;  
+                        const detail: any = await Seminar_Model.seminar_detail(db, filter2); 
+                        let tempDataDetail = [];
+                        for (const [key, value] of Object.entries(detail)) { 
+                            const idx: number = detail[key].idx; 
+                            const detail_name:string = detail[key].detail_name;
+                            const startdate: string = Functions.timeConvertermas(detail[key].startdate);  
+                            const enddate: string = Functions.timeConvertermas(detail[key].enddate);   
+                            const datas = {  
+                                        idx: idx, 
+                                        detail_name: detail_name, 
+                                        startdate: startdate, 
+                                        enddate: enddate,  
+                                    } 
+                            tempDataDetail.push(datas); 
+                        }
                         const data = { 
                                     seminar_id : seminar_id,
                                     title_id: title_id, 
@@ -477,6 +512,7 @@ export default async function seminar(fastify: FastifyInstance) {
                                     phonenumber_seminar: phonenumber_seminar, 
                                     email_seminar: email_seminar, 
                                     fullname_semina: fullname_semina, 
+                                    detail: tempDataDetail, 
                                 } 
                         tempData.push(data); 
                     }

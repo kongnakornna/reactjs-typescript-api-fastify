@@ -144,8 +144,101 @@ export class SeminarModels {
                 process.exit(1)
             } 
         }
-    }   
+    }
+    seminar_detail(db: knex, filter: any) {
+        try {
+            const title_id = filter.title_id;  
+            let query = db('seminar_detail as s');  
+                query = query.select('s.id as idx');    
+                query = query.select('s.title as detail_name');     
+                query = query.select('s.startdate as startdate'); 
+                query = query.select('s.enddate as enddate');    
+                query = query.where('s.seminar_title_id', title_id);   
+                query = query.orderBy('s.id', 'asc');
+            return query;
+        } catch (err:any) {
+            console.log(`err=>`, err); 
+            if (err) { 
+                process.exit(1)
+            } 
+        }
+    }  
     filter_detail(db: knex, filter: any) {
+        try {
+                const keyword = filter.keyword; 
+                const id= filter.id; 
+                const title_id = filter.title_id; 
+                const location= filter.location; 
+                const province= filter.province; 
+                const telephone= filter.telephone;
+                const email= filter.email;
+                const start= filter.start;
+                const end = filter.end;  
+                const start_event_end = filter.start_event_end;  
+                const end_event_end = filter.end_event_end;  
+                const page= filter.pages; 
+                const isCount = filter.isCount;
+                const orderBy = filter.orderBy;
+                const limit = filter.limit; 
+                const perpage = filter.perpage ||500; 
+                const status = filter.status || 1; 
+                if (isCount == 0) {
+                    console.log(`rows filter `, filter); 
+                    console.log(`data keyword `, keyword);
+                    console.log(`rows isCount `, isCount); 
+                } else {
+                    console.log(`data filter `, filter); 
+                    console.log(`data keyword `, keyword);
+                    console.log(`data isCount `, isCount); 
+                }
+                let query = db('seminar_detail as s'); 
+                    if(isCount==1){
+                        query = query.select('s.id as idx');
+                    }else{ 
+                        query = query.select('s.id as idx');    
+                        query = query.select('s.title as detail_name');     
+                       // query = query.select('s.startdate as startdate'); 
+                       // query = query.select('s.enddate as enddate');   
+                    } 
+                    query = query.where('s.status', status);   
+                    if (id==null) { }else{
+                    query = query.andWhere('s.id ', id );   
+                    }  
+                    if (title_id==null) { }else{
+                    query = query.andWhere('t.id', title_id);   
+                    } 
+                    if (start==null && end==null) { }else{
+                        query.andWhere("s.startdate BETWEEN '" + start + "' AND '" + end + "'"); 
+                    }  
+                    if (start_event_end==null && end_event_end==null) { }else{
+                        query.andWhere("s.enddate BETWEEN '" + start_event_end + "' AND '" + end_event_end + "'"); 
+                    }  
+                    if (id== null) {
+                        if (orderBy== null) { 
+                                query = query.orderBy('s.id', 'desc');
+                        }else{
+                            if (orderBy== 'desc') {  
+                                query = query.orderBy('s.id', 'desc');
+                            }else{
+                                query = query.orderBy('s.id', 'asc');
+                            }   
+                        } 
+                     }else{   
+                            query = query.orderBy('s.id', 'asc');
+                    } 
+                if (perpage == null && page == null) { }else{   
+                            query = query.limit(perpage);
+                            query = query.offset(page);
+                } 
+            return query;
+        } catch (err:any) {
+            console.log(`err=>`, err); 
+            if (err) { 
+                process.exit(1)
+            } 
+        }
+    }  
+    filter_details(db: knex, filter: any) {
         try {
                 const keyword = filter.keyword; 
                 const id= filter.id; 
