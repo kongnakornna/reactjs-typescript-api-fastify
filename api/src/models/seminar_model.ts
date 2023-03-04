@@ -57,7 +57,7 @@ export class SeminarModels {
     filter_title(db: knex, filter: any) {
         try {
                 const keyword = filter.keyword; 
-                const id= filter.id; 
+                const title_id= filter.title_id; 
                 const narrator_id = filter.narrator_id; 
                 const location= filter.location; 
                 const province= filter.province; 
@@ -98,8 +98,8 @@ export class SeminarModels {
                     
                     } 
                     query = query.where('u.status', status);   
-                    if (id== null) { }else{
-                        query = query.andWhere('s.id ', id );   
+                    if (title_id== null) { }else{
+                        query = query.andWhere('s.id ', title_id );   
                     }  
                     if (narrator_id== null) { }else{
                         query = query.andWhere('u.narrator_id', narrator_id);   
@@ -117,7 +117,7 @@ export class SeminarModels {
                          query = query.whereBetween("s.datetime_end", [start_event_end, end_event_end]);  
                     }    
                     query = query.groupBy('s.id');   
-                    if (id== null) {
+                    if (title_id== null) {
                         if (orderBy== null) { 
                                 query = query.orderBy('s.id', 'desc');   
                         }else{
