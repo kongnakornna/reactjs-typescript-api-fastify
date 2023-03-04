@@ -81,11 +81,11 @@ export class SeminarDetailModel {
                     if (title_id!="" || title_id!==0) {  
                         query = query.andWhere('t.id', title_id);   
                     }  
-                    if (email!="" || email!==null) {  
-                        //query = query.andWhereLike("u.email", { keyword: email ? `%${email}%` : "%" });   
+                    if (email!="" || email!==null) {    
+                        query = query.andWhere('u.email', 'like', `%${email}%`); 
                     } 
                     if (keyword!=null) { 
-                        query.andWhere("s.title", { keyword: keyword ? `%${keyword}%` : "%" }); 
+                        query = query.andWhere('s.title', 'like', `%${keyword}%`); 
                     } 
                     
                     if (start == null || end == null) {}else{ 

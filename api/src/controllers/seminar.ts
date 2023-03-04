@@ -197,15 +197,15 @@ export default async function seminar(fastify: FastifyInstance) {
                         return  // exit process   
                 }
     }) 
-    fastify.get('/usersseminarlist',{preValidation: [fastify.authenticate]},async (request: FastifyRequest, reply: FastifyReply) => {
-            /******************************/
+    //fastify.get('/usersseminarlist',{preValidation: [fastify.authenticate]},async (request: FastifyRequest, reply: FastifyReply) => {
+    fastify.get('/usersseminarlist',async (request: FastifyRequest, reply: FastifyReply) => {
             reply.header("Access-Control-Allow-Origin", "*");  
             reply.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); 
             try {
-                    const headers: any = request.headers         
                     const query: any = request.query       
-                    const params: any = request.params        
-                    /******************************/
+                    /* 
+                    const headers: any = request.headers   
+                    const params: any = request.params     
                     const str: any = request.headers.authorization; // token in Bearer  header
                     const token: any = str.replace("Bearer ", "");  
                     const token_bearer: any = fastify.jwt.verify(token); 
@@ -214,6 +214,7 @@ export default async function seminar(fastify: FastifyInstance) {
                     const end_token: any = token_bearer.exp;
                     const host: any = headers.host   
                     const secret_key: any = headers.secret_key   
+                    */
                     const active_datatime: string = query.active_datatime || 1;
                     const status_active: string = query.status_active|| null;
                     const period_id: string = query.period_id;                    
@@ -288,6 +289,8 @@ export default async function seminar(fastify: FastifyInstance) {
                         const title_url: string = ResultArray[key].title_url; 
                         const startdate: string = Functions.timeConvertermas(ResultArray[key].startdate);
                         const enddate: string = Functions.timeConvertermas(ResultArray[key].enddate); 
+                        const narrator_firstname: string = ResultArray[key].narrator_firstname; 
+                        const narrator_lastname: string = ResultArray[key].narrator_lastname;  
                         const fullname_narrator: string = ResultArray[key].fullname_narrator; 
                         const narrator_email: string = ResultArray[key].narrator_email;   
                         const firstname_seminar: string = ResultArray[key].firstname_seminar;
@@ -324,19 +327,20 @@ export default async function seminar(fastify: FastifyInstance) {
                                     url: title_url, 
                                     startdate: startdate, 
                                     enddate: enddate, 
-                                    fullname_narrator: fullname_narrator, 
+                                    narrator: fullname_narrator,  
+                                    fullname_narrator: narrator_firstname+' '+narrator_lastname, 
                                     narrator_email: narrator_email, 
-                                    firstname_seminar: firstname_seminar, 
-                                    lastname_seminar: lastname_seminar, 
+                                    // firstname_seminar: firstname_seminar, 
+                                    // lastname_seminar: lastname_seminar, 
+                                    fullname_seminar: lastname_seminar+' '+firstname_seminar, 
                                     phonenumber_seminar: phonenumber_seminar, 
                                     email_seminar: email_seminar, 
                                     fullname_semina: fullname_semina, 
-                                    detail: tempDataDetail, 
+                                   // detail: tempDataDetail, 
                                 } 
                         tempData.push(data); 
                     }
                     const resultData: any = tempData; // นำ array มาใส่ใน object เพื่อนำไปแปลงเป็น Json
- 
                     // console.log("filter1=>", filter1) 
                     // console.warn("resultData=>", resultData)  
                     reply.code(200).send({
@@ -469,6 +473,8 @@ export default async function seminar(fastify: FastifyInstance) {
                         const title_url: string = ResultArray[key].title_url; 
                         const startdate: string = Functions.timeConvertermas(ResultArray[key].startdate);
                         const enddate: string = Functions.timeConvertermas(ResultArray[key].enddate); 
+                        const narrator_firstname: string = ResultArray[key].narrator_firstname; 
+                        const narrator_lastname: string = ResultArray[key].narrator_lastname;  
                         const fullname_narrator: string = ResultArray[key].fullname_narrator; 
                         const narrator_email: string = ResultArray[key].narrator_email;   
                         const firstname_seminar: string = ResultArray[key].firstname_seminar;
@@ -505,14 +511,16 @@ export default async function seminar(fastify: FastifyInstance) {
                                     url: title_url, 
                                     startdate: startdate, 
                                     enddate: enddate, 
-                                    fullname_narrator: fullname_narrator, 
+                                    narrator: fullname_narrator,  
+                                    fullname_narrator: narrator_firstname+' '+narrator_lastname, 
                                     narrator_email: narrator_email, 
-                                    firstname_seminar: firstname_seminar, 
-                                    lastname_seminar: lastname_seminar, 
+                                    // firstname_seminar: firstname_seminar, 
+                                    // lastname_seminar: lastname_seminar, 
+                                    fullname_seminar: lastname_seminar+' '+firstname_seminar, 
                                     phonenumber_seminar: phonenumber_seminar, 
                                     email_seminar: email_seminar, 
                                     fullname_semina: fullname_semina, 
-                                    detail: tempDataDetail, 
+                                   // detail: tempDataDetail, 
                                 } 
                         tempData.push(data); 
                     }

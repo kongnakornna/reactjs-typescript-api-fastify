@@ -97,11 +97,11 @@ export class SdusersNarratorModel {
                     if (seminar_id=="" || seminar_id==null){}else{  
                         query = query.andWhere('us.seminar_id', seminar_id);
                     }   
-                    if (keyword == null) {}else{
-						/***********/
-                    }  
+                    if (keyword!=null) { 
+                            query = query.andWhere('u.firstname', 'like', `%${keyword}%`); 
+                    } 
                     if (start == null || end == null) {}else{ 
-                        query = query.andWhereBetween("t.datetime_start", [start, end]); 
+                            query = query.andWhereBetween("t.datetime_start", [start, end]); 
                     }   
                     query = query.groupBy('us.seminar_id');
                     if (seminar_id == null || seminar_id == 0) {

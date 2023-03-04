@@ -77,18 +77,18 @@ export class SeminarTitleModel {
             if (narrator_id==null){}else{  
                 query = query.andWhere('u.narrator_id', narrator_id);
             }
-            if (email==null){}else{  
-                query.andWhere("u.email", { keyword: email ? `%${email}%` : "%" });
+            if (email==null){}else{   
+                query = query.andWhere('u.email', 'like', `%${email}%`); 
+            } 
+            if (keyword!=null) { 
+                query = query.andWhere('s.title', 'like', `%${keyword}%`); 
+            } 
+            if (start == null || end == null) {}else{ 
+                query = query.andWhereBetween("u.datetime_start ", [start, end]); 
             }
-            if (keyword==null){}else{  
-                query.andWhere("s.title", { keyword: keyword ? `%${keyword}%` : "%" });
-            }
-            if (start== null && end==null){}else{  
-                query.andWhere("u.datetime_start BETWEEN '" + start + "' AND '" + end + "'");
-            }
-            if (start_event_end==null){}else{  
-                query.andWhere("u.datetime_end BETWEEN '" + start_event_end + "' AND '" + end_event_end + "'");
-            }
+            if (start_event_end == null || end_event_end == null) {}else{ 
+                query = query.andWhereBetween("u.datetime_end", [start_event_end, end_event_end]); 
+            }  
             if (id == null) {
                 if (orderBy == null) {
                     query = query.orderBy('u.id', 'desc');

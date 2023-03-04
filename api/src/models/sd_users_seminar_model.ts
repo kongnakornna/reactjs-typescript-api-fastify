@@ -88,12 +88,12 @@ export class SdusersSeminarModel {
                         if (title_id==null || title_id==0){}else{  
                             query = query.andWhere('t.id', title_id);   
                         } 
-                        if (keyword == null) {}else{
-                            /***********/
-                        }  
+                        if (keyword!=null) { 
+                            query = query.andWhere('t.title', 'like', `%${keyword}%`); 
+                        } 
                         if (start == null || end == null) {}else{ 
                             query = query.andWhereBetween("t.datetime_start", [start, end]); 
-                        }   
+                        }  
                         query = query.groupBy('us.seminar_id');
                         if (seminar_id == null || seminar_id == 0) {
                             if (orderBy!="" || orderBy!==null) {  

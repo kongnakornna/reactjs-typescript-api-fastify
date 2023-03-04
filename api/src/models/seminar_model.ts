@@ -108,17 +108,17 @@ export class SeminarModels {
                     if (narrator_id== null) { }else{
                         query = query.andWhere('u.narrator_id', narrator_id);   
                     }  
-                    if (email== null) { }else{
-                        //query.andWhere("u.email", { keyword: email ? `%${email}%` : "%" });   
-                    } 
-                    if (keyword!=null) { 
-                        //query.andWhere("s.title", { keyword: keyword ? `%${keyword}%` : "%" }); 
-                    } 
-                    if (start==null && end== null) { }else{
-                        query.andWhere("t.datetime_start BETWEEN '" + start + "' AND '" + end + "'"); 
+                    if (email== null) { }else{  
+                        query = query.andWhere('u.emai"', 'like', `%${email}%`); 
                     }  
-                    if (start_event_end == null && end_event_end == null) { }else{
-                        query.andWhere("t.datetime_end BETWEEN '" + start_event_end + "' AND '" + end_event_end + "'");
+                    if (keyword==null) { }else{ 
+                         query = query.andWhere('s.title"', 'like', `%${keyword}%`); 
+                    } 
+                    if (start==null && end==null) { }else{ 
+                         query = query.whereBetween("s.datetime_start", [start, end]);  
+                    }
+                    if (start_event_end == null && end_event_end == null) { } else { 
+                         query = query.whereBetween("s.datetime_end", [start_event_end, end_event_end]);  
                     }    
                     if (id== null) {
                         if (orderBy== null) { 
@@ -206,13 +206,16 @@ export class SeminarModels {
                     }  
                     if (title_id==null) { }else{
                     query = query.andWhere('t.id', title_id);   
+                    }  
+                    if (keyword==null) { }else{ 
+                         query = query.andWhere('s.title', 'like', `%${keyword}%`); 
                     } 
-                    if (start==null && end==null) { }else{
-                        query.andWhere("s.startdate BETWEEN '" + start + "' AND '" + end + "'"); 
-                    }  
-                    if (start_event_end==null && end_event_end==null) { }else{
-                        query.andWhere("s.enddate BETWEEN '" + start_event_end + "' AND '" + end_event_end + "'"); 
-                    }  
+                    if (start==null && end==null) { }else{ 
+                         query = query.whereBetween("s.startdate", [start, end]);  
+                    }
+                    if (start_event_end == null && end_event_end == null) { } else { 
+                         query = query.whereBetween("s.enddate", [start_event_end, end_event_end]);  
+                    }   
                     if (id== null) {
                         if (orderBy== null) { 
                                 query = query.orderBy('s.id', 'desc');
@@ -293,17 +296,17 @@ export class SeminarModels {
                     if (title_id==null) { }else{
                     query = query.andWhere('t.id', title_id);   
                     }  
-                    if (email==null) { }else{
-                        //query.andWhere("u.email", { keyword: email ? `%${email}%` : "%" });   
+                    if (email==null) { }else{  
+                        query = query.andWhere('u.email', 'like', `%${email}%`); 
                     } 
-                    if (keyword==null) { }else{
-                       // query.andWhere("s.title", { keyword: keyword ? `%${keyword}%` : "%" }); 
+                    if (keyword==null) { }else{ 
+                         query = query.andWhere('s.title', 'like', `%${keyword}%`); 
                     } 
-                    if (start==null && end==null) { }else{
-                        query.andWhere("s.startdate BETWEEN '" + start + "' AND '" + end + "'"); 
+                    if (start==null && end==null) { }else{ 
+                         query = query.whereBetween("s.startdate", [start, end]);  
                     }  
                     if (start_event_end==null && end_event_end==null) { }else{
-                        query.andWhere("s.enddate BETWEEN '" + start_event_end + "' AND '" + end_event_end + "'"); 
+                        query = query.whereBetween("s.enddate", [start_event_end, end_event_end]);  
                     }  
                     if (id== null) {
                         if (orderBy== null) { 
@@ -363,6 +366,8 @@ export class SeminarModels {
                         query = query.select('t.url as title_url');  
                         query = query.select('t.datetime_start as startdate'); 
                         query = query.select('t.datetime_end as enddate');                         
+                        query = query.select('u.firstname as narrator_firstname');    
+                        query = query.select('u.lastname as narrator_lastname');    
                         query = query.select('u.email as narrator_email');    
                         query = query.select('us.seminar_id as seminar_id'); 
                         query = query.select('us.firstname as firstname_seminar'); 
@@ -380,9 +385,9 @@ export class SeminarModels {
                     if (title_id==null || title_id==0){}else{  
                         query = query.andWhere('t.id', title_id);   
                     } 
-                    if (keyword == null) {}else{
-                        // query = query.andWhereLike('t.title', `%${keyword}%`); 
-                        // query = query.andWhereILike("t.title", { keyword: keyword ? `%${keyword}%` : "%" }); 
+                    if (keyword == null) { } else { 
+                        query = query.andWhere('us.firstname', 'like', `%${keyword}%`);
+                        query = query.orWhere('us.lastname', 'like', `%${keyword}%`);
                     }  
                     if (start == null || end == null) {}else{ 
                         query = query.whereBetween("t.datetime_start", [start, end]); 
@@ -405,7 +410,8 @@ export class SeminarModels {
                     query = query.offset(page);
                 console.log(`query=>`, query); 
             return query;
-        } catch (err:any) {
+        } catch (err: any) {
+            console.error(err);
             console.log(`err=>`, err); 
             if (err) { 
                 process.exit(1)
@@ -478,15 +484,15 @@ export class SeminarModels {
                     } 
                     if (title_id==null){}else{  
                         query = query.andWhere('t.id', title_id);   
+                    }   
+                    if (email == null) { } else { 
+                        query = query.andWhere('us.email', 'like', `%${email}%`); 
                     }  
-                    if (email==null){}else{  
-                        query.andWhere("us.email", { keyword: email ? `%${email}%` : "%" });   
-                    } 
                     if (seminar_id==null){}else{  
                         query = query.andWhere('us.seminar_id', seminar_id);   
                     }  
-                    if (keyword==null){}else{  
-                       // query.andWhere("t.title", { keyword: keyword ? `%${keyword}%` : "%" }); 
+                    if (keyword==null){}else{   
+                        query = query.andWhere('t.title', 'like', `%${keyword}%`); 
                     } 
                     if (start==null && end==null){}else{  
                         query = query.andWhereBetween("l.datetime", [start, end]); 

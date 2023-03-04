@@ -177,6 +177,7 @@ export class UserModel {
       const isCount = filter.isCount;
       const orderBy = filter.orderBy;
       const limit = filter.limit;
+      const email = filter.email;
       const perpage = filter.perpage || filter.sizepsge;
       if (isCount == 0) {
         console.log(`rows filter `, filter);
@@ -233,13 +234,16 @@ export class UserModel {
       }
       if (level== null) { }else{
         query = query.andWhere('u.level', level);
-      }
-      if (keyword== null) { }else{
-        //query.andWhere("u.firstname", { keyword: keyword ? `%${keyword}%` : "%" });
-      }
-      if (start== null && end== null) { }else{
-        query.andWhere("u.date BETWEEN '" + start + "' AND '" + end + "'");
-      }
+      } 
+      if (email == null) {}else{ 
+          query = query.andWhere('u.email', 'like', `%${email}%`); 
+      } 
+      if (keyword!=null) { 
+          query = query.andWhere('u.firstname', 'like', `%${keyword}%`); 
+      } 
+      if (start == null || end == null) {}else{ 
+          query = query.andWhereBetween("u.date ", [start, end]); 
+      } 
       if (user_id == null) {
         if (orderBy == null) {
           query = query.orderBy('u.user_id', 'desc');
