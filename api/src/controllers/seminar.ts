@@ -566,5 +566,171 @@ export default async function seminar(fastify: FastifyInstance) {
                         // process.exit(1)            
                         return  // exit process    
             }           
-    })   
+    }) 
+     fastify.get('/titlelist',async (request: FastifyRequest, reply: FastifyReply) => {
+            reply.header("Access-Control-Allow-Origin", "*");  
+            reply.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); 
+            try {
+                    const query: any = request.query       
+                    /* 
+                    const headers: any = request.headers   
+                    const params: any = request.params     
+                    const str: any = request.headers.authorization; // token in Bearer  header
+                    const token: any = str.replace("Bearer ", "");  
+                    const token_bearer: any = fastify.jwt.verify(token); 
+                    console.warn(`token_bearer `, token_bearer);
+                    const start_token: any = token_bearer.iat;
+                    const end_token: any = token_bearer.exp;
+                    const host: any = headers.host   
+                    const secret_key: any = headers.secret_key   
+                    */
+                    const active_datatime: string = query.active_datatime || 1;
+                    const status_active: string = query.status_active|| null;
+                    const period_id: string = query.period_id;                    
+                    const keyword = query.keyword; 
+                    const seminar_id= query.seminar_id; 
+                    const title_id = query.title_id; 
+                    const narrator_id = query.narrator_id; 
+                    const location = query.location; 
+                    const province = query.province; 
+                    const telephone = query.telephone; 
+                    const email= query.email;
+                    const start= query.start;
+                    const end = query.end;    
+                    const isCount = query.isCount;
+                    const orderBy = query.orderBy || "desc";
+                    const limit = query.limit;  
+                    const status = query.status || 1;
+                    const page: number = Number(query?.page) || 1;
+                    const perpage: number = Number(query?.perpage) || 20;            
+                    const filter: any = {} 
+                    filter.seminar_id=seminar_id || null; 
+                    filter.title_id = title_id || null; 
+                    filter.period_id = period_id || null;  
+                    filter.status_active = status_active || null; 
+                    filter.status = status || 1; 
+                    filter.keyword=keyword || null;  
+                    filter.narrator_id = narrator_id || null;  
+                    filter.location = location || null;  
+                    filter.province = province || null;  
+                    filter.telephone=telephone || null;   
+                    filter.isCount = 1;
+                    const rows: any = await Seminar_Model.filter_title(db, filter);                      
+                    const getCount = rows
+                    console.log("getCount", getCount) 
+                    const row: number = rows.length; // count array 
+                    if(row==0){
+                        reply.code(200).send({
+                                        response: {
+                                            message: "Result,Data is null!", 
+                                            error:'OK',                                            
+                                            StatusCode: '200',  
+                                            total_page: 0,
+                                            total: row, 
+                                            page: page,
+                                            perpage: perpage,
+                                            data: null,
+                                        }
+                                        
+                                    })   
+                                    
+                        return  // exit process 
+                    }
+                    const totalpages: number = Math.round((row / perpage)) || 1;
+                    console.log(`total_pages=`,totalpages);
+                    const filter1: any = {} 
+                    filter1.seminar_id=seminar_id || null; 
+                    filter1.title_id = title_id || null; 
+                    filter1.period_id = period_id || null; 
+                    filter1.status_active = status_active || null; 
+                    filter1.status = status || 1; 
+                    filter1.keyword=keyword || null; 
+                    filter1.narrator_id = narrator_id || null;  
+                    filter1.location = location || null;  
+                    filter1.province = province || null;  
+                    filter1.telephone=telephone || null;   
+                    filter1.start=start || null; 
+                    filter1.end=end || null; 
+                    filter1.order=orderBy || null; 
+                    filter1.pages=page || null;  
+                    filter1.perpage=perpage || 20; 
+                    filter1.isCount=0;
+                    const ResultArray: any = await Seminar_Model.filter_title(db, filter1);   
+                    let tempData = [];
+                    for (const [key, value] of Object.entries(ResultArray)) {
+						// เอาค่าใน Object มา แปลง เป็น array แล้วนำไปใช้งาน ต่อ 
+                        const title_id: number = ResultArray[key].idx; 
+                        const title:string = ResultArray[key].title;
+                        const firstname: string = ResultArray[key].firstname; 
+                        const lastname: string = ResultArray[key].lastname;  
+                        const fullname: string = ResultArray[key].fullname;  
+                        const date: string = ResultArray[key].date;   
+                        const filter2: any = {}  
+                        filter2.title_id = title_id || null;  
+                        const detail: any = await Seminar_Model.seminar_detail(db, filter2); 
+                        let tempDataDetail = [];
+                        for (const [key, value] of Object.entries(detail)) { 
+                            const idx: number = detail[key].idx; 
+                            const detail_name:string = detail[key].detail_name;
+                            const startdate: string = Functions.timeConvertermas(detail[key].startdate);  
+                            const enddate: string = Functions.timeConvertermas(detail[key].enddate);   
+                            const datas = {  
+                                        idx: idx, 
+                                        detail_name: detail_name, 
+                                        startdate: startdate, 
+                                        enddate: enddate,  
+                                    } 
+                            tempDataDetail.push(datas); 
+                        }
+                        const data = { 
+                                    title_id : title_id,
+                                    title: title, 
+                                    fullname_narrator: firstname+' '+lastname, 
+                                    date: Functions.timeConvertermas(date),   
+                                   detail: tempDataDetail, 
+                                } 
+                        tempData.push(data); 
+                    }
+                    const resultData: any = tempData; // นำ array มาใส่ใน object เพื่อนำไปแปลงเป็น Json
+                    // console.log("filter1=>", filter1) 
+                    // console.warn("resultData=>", resultData)  
+                    reply.code(200).send({
+                                        response: {
+                                            message: "Result,Data successful!", 
+                                            error:'OK',                                            
+                                            StatusCode: '200',  
+                                            total_page: totalpages,
+                                            total: row, 
+                                            page: page,
+                                            perpage: perpage,
+                                            data: resultData,
+                                        }
+                                        
+                                    })   
+                                    
+                return  // exit process 
+            } catch (err) { 
+                fastify.log.error('err=>', err);
+                if (err) { 
+                    fastify.log.error(err)
+                    // process.exit(1)            
+                    return  // exit process    
+                } 
+                reply.code(500).send({
+                                        response: {
+                                            message: "Eror Result!", 
+                                            error:err,                                            
+                                            StatusCode: '500',  
+                                            total_page: 0,
+                                            total: 0, 
+                                            page: 0,
+                                            perpage: 0,
+                                            data: null,
+                                        }
+                                        
+                                })    
+                        // process.exit(1)            
+                        return  // exit process    
+            }           
+    })  
 } 

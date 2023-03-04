@@ -66,12 +66,12 @@ export class SeminarModels {
                 const start= filter.start;
                 const end = filter.end;  
                 const start_event_end = filter.start_event_end;  
-                const end_event_end = filter.end_event_end;  
-                const page= filter.pages; 
+                const end_event_end = filter.end_event_end; 
                 const isCount = filter.isCount;
                 const orderBy = filter.orderBy;
                 const limit = filter.limit; 
-                const perpage = filter.perpage || filter.sizepsge; 
+                const page= filter.page || 1;
+                const perpage = filter.perpage || 20; 
                 const status = filter.status || 1; 
                 if (isCount == 0) {
                     console.log(`rows filter `, filter); 
@@ -83,25 +83,21 @@ export class SeminarModels {
                     console.log(`data isCount `, isCount); 
                 }
                 let query = db('seminar_title as s');
-                    query = query.innerJoin('sd_users_narrator as u', 'u.narrator_id', 's.narrator_id');  
-                    query = query.leftJoin('seminarregister as r', 'r.seminar_id', 's.id'); 
-                    query = query.leftJoin('sd_users_seminar as us', 'us.seminar_id', 'r.seminar_id');  
+                    query = query.innerJoin('sd_users_narrator as u', 'u.narrator_id', 's.narrator_id');   
                     if(isCount==1){
                         query = query.select('s.id as idx');
                     }else{ 
-                        query = query.select('s.id as idx');   
+                        query = query.select('s.id as idx'); 
+                        query = query.select('s.title');   
                         query = query.select('u.firstname');   
-                        query = query.select('u.lastname');  
-                        //query = query.select("CONCAT(u.firstname,' ',u.lastname) AS narrator_name");
+                        query = query.select('u.lastname');   
                         query = query.select('u.fullname');   
                         query = query.select('u.nickname');    
-                        query = query.select('u.date');   
-                        // query = query.select('u.username');   
-                        // query = query.select('u.password');   
+                        query = query.select('u.date');       
                         query = query.select('u.email');     
                     
                     } 
-                    query = query.where('s.status', status);   
+                    query = query.where('u.status', status);   
                     if (id== null) { }else{
                         query = query.andWhere('s.id ', id );   
                     }  
@@ -120,9 +116,10 @@ export class SeminarModels {
                     if (start_event_end == null && end_event_end == null) { } else { 
                          query = query.whereBetween("s.datetime_end", [start_event_end, end_event_end]);  
                     }    
+                    query = query.groupBy('s.id');   
                     if (id== null) {
                         if (orderBy== null) { 
-                                query = query.orderBy('u.id', 'desc');   
+                                query = query.orderBy('s.id', 'desc');   
                         }else{
                             if (orderBy== 'desc') {  
                                 query = query.orderBy('s.id', 'desc');
@@ -133,10 +130,8 @@ export class SeminarModels {
                     }else{   
                             query = query.orderBy('s.id', 'asc');
                     } 
-                if (perpage == null && page == null) { }else{   
-                            query = query.limit(perpage);
-                            query = query.offset(page);
-                } 
+                    query = query.limit(perpage);
+                    query = query.offset(page);
             return query;
         } catch (err:any) {
             console.log(`err=>`, err); 
@@ -215,7 +210,8 @@ export class SeminarModels {
                     }
                     if (start_event_end == null && end_event_end == null) { } else { 
                          query = query.whereBetween("s.enddate", [start_event_end, end_event_end]);  
-                    }   
+                    }  
+                    query = query.groupBy('s.id'); 
                     if (id== null) {
                         if (orderBy== null) { 
                                 query = query.orderBy('s.id', 'desc');
@@ -307,10 +303,11 @@ export class SeminarModels {
                     }  
                     if (start_event_end==null && end_event_end==null) { }else{
                         query = query.whereBetween("s.enddate", [start_event_end, end_event_end]);  
-                    }  
+                    } 
+                    query = query.groupBy('s.id');  
                     if (id== null) {
                         if (orderBy== null) { 
-                                query = query.orderBy('u.id', 'desc');   
+                               query = query.orderBy('s.id', 'desc');   
                         }else{
                             if (orderBy== 'desc') {  
                                 query = query.orderBy('s.id', 'desc');
@@ -496,7 +493,8 @@ export class SeminarModels {
                     } 
                     if (start==null && end==null){}else{  
                         query = query.andWhereBetween("l.datetime", [start, end]); 
-                    }   
+                    } 
+                    query = query.groupBy('l.id');   
                     if (id == null) {
                             if (orderBy==null) {  
                                 if (orderBy== 'desc') {  
