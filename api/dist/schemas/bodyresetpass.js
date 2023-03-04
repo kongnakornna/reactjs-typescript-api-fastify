@@ -1,0 +1,1 @@
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default={body:{type:"object",properties:{reset_valule:{type:"string",minLength:10,maxLength:500}},required:["reset_valule"]}};

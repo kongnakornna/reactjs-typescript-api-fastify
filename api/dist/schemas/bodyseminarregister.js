@@ -1,0 +1,1 @@
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default={body:{type:"object",properties:{seminar_title_id:{type:"number",minLength:1},seminar_id:{type:"number",minLength:1},period_id:{type:"number",minLength:1}},required:["seminar_title_id","seminar_id","period_id"]}};

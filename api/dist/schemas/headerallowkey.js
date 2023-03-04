@@ -1,0 +1,1 @@
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default={properties:{"x-fastify-token":{type:"string"},description:"allow token"},headers:{type:"object",properties:{client_id:{type:"string"},access_token_key:{type:"string"}},required:["client_id","access_token_key"]},body:{type:"object",properties:{uid:{type:"string"}},required:[]}};

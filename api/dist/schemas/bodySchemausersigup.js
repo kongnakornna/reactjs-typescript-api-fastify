@@ -1,0 +1,1 @@
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default={body:{type:"object",properties:{firstname:{type:"string",minLength:4},lastname:{type:"string",minLength:4},email:{type:"string",minLength:4},username:{type:"string",minLength:4},password:{type:"string",minLength:8}},required:["firstname","lastname","email","username","password"]}};

@@ -72,6 +72,7 @@ interface FastifyInstance {
     port: any
     subscriber: any
     datetimeDatas: any
+    value: any
     }
 interface FastifyRequest {
     jwtVerify: any
@@ -144,6 +145,7 @@ interface FastifyRequest {
     idx: any
     subscriber: any
     datetimeDatas: any
+    value: any
     }
 interface FastifyReply {
     db: knex
@@ -216,5 +218,6 @@ interface FastifyReply {
     idx: any
     subscriber: any
     datetimeDatas: any
+    value: any
     } 
 }

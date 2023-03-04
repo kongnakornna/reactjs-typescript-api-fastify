@@ -1,0 +1,1 @@
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default={body:{type:"object",properties:{type_id:{type:"number",minLength:1},ipaddress:{type:"string",minLength:2},port:{type:"string",minLength:8},status:{type:"number"}},required:["type_id","ipaddress","port","status"]}};

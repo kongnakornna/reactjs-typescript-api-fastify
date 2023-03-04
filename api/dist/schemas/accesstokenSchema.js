@@ -1,0 +1,1 @@
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default={body:{type:"object",properties:{client_id:{type:"string"},secret_key:{type:"string"},access_token_key:{type:"string"}},required:["client_id","secret_key","access_token_key"]}};

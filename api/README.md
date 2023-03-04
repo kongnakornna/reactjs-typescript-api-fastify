@@ -47,6 +47,10 @@
 - Run `npm audit fix` #Audit and tries fixing vulnerabilities in dependencies
 - Run `npm audit fix `--focce #Forces fix of problems found in installed packages
 # installing further `dependencies if necessary
+ 
+# taskkill /f /im node.exe
+# netstat -an
+
 
 ## Database
 Database as MySQL  

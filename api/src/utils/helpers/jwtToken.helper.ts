@@ -1,7 +1,7 @@
 import jwt  from "jsonwebtoken";
 
-import { Validator } from '../../utils/helpers/validator.helper';  
-const Validators = new Validator()
+import { _Validator } from '../../utils/helpers/validator.helper';  
+const Validators = new _Validator()
 import { encode, decode } from 'string-encode-decode'
 import { error } from 'console'
 

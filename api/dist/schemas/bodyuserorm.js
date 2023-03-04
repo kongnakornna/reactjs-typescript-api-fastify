@@ -1,0 +1,1 @@
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default={body:{type:"object",properties:{uid:{type:"integer"},lang:{type:"string",minLength:2,maxLength:255}},required:["uid"]}};

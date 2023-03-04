@@ -26,7 +26,8 @@ export class SeminarDetailModel {
             .where('id', id)
             .del()
     }
-    filter_data(db: knex,filter: any) {
+    filter_data(db: knex, filter: any) {
+        try {
                 const keyword = filter.keyword; 
                 const id= filter.id; 
                 const title_id = filter.title_id; 
@@ -68,32 +69,32 @@ export class SeminarDetailModel {
                         query = query.select('s.startdate as startdate'); 
                         query = query.select('s.enddate as enddate'); 
                         query = query.select('u.firstname');   
-                        query = query.select('u.lastname');  
-                        query = query.select("CONCAT(u.firstname,' ',u.lastname) as narrator_name");
+                        query = query.select('u.lastname');   
                         query = query.select('u.fullname as narrator_fullname');   
                         query = query.select('u.nickname as narrator_nickname');     
                         query = query.select('u.email');    
                     } 
-                    query = query.where('1=1');
-                    query = query.andWhere('s.status', status);   
+                    query = query.where('s.status', status);   
                     if (id!="" || id!==0) {  
-                    query = query.andWhere('s.id ', id );   
+                        query = query.andWhere('s.id ', id );   
                     }  
                     if (title_id!="" || title_id!==0) {  
-                    query = query.andWhere('t.id', title_id);   
+                        query = query.andWhere('t.id', title_id);   
                     }  
                     if (email!="" || email!==null) {  
-                    query.andWhere("u.email", { keyword: email ? `%${email}%` : "%" });   
+                        //query = query.andWhereLike("u.email", { keyword: email ? `%${email}%` : "%" });   
                     } 
                     if (keyword!=null) { 
                         query.andWhere("s.title", { keyword: keyword ? `%${keyword}%` : "%" }); 
                     } 
-                    if (start!=null && end!=null) { 
-                        query.andWhere("s.startdate BETWEEN '" + start + "' AND '" + end + "'"); 
+                    
+                    if (start == null || end == null) {}else{ 
+                        query = query.andWhereBetween("s.startdate", [start, end]); 
+                    } 
+                    if (start_event_end!=null && end_event_end!=null) {  
+                        query = query.andWhereBetween("s.enddate", [start, end]); 
                     }  
-                    if (start_event_end!=null && end_event_end!=null) { 
-                        query.andWhere("s.enddate BETWEEN '" + start_event_end + "' AND '" + end_event_end + "'"); 
-                    }  
+                    query = query.groupBy('s.id');
                     if (id!="" || id!==0) {  
                             query = query.orderBy('s.id', 'asc');
                     }else{
@@ -108,20 +109,15 @@ export class SeminarDetailModel {
                             } 
     
                     }
-                    if (perpage!="" && page!="") {   
-                        query = query.limit(perpage);
-                        query = query.offset(page);
-                    }else{
-                        if (limit!="" || limit!==0) {  
-                            query = query.limit(limit);  
-                        } 
-                    } 
-                    if(isCount==1){ 
-                        console.log(`query `, query);
-                        return query;
-                    }else{ 
-                        console.log(`query `, query);
-                        return  query;   
-                    }  
+                    query = query.limit(perpage);
+                    query = query.offset(page);
+                    console.log(`query=>`, query); 
+                return query;
+        } catch (err:any) {
+            console.log(`err=>`, err); 
+            if (err) { 
+                process.exit(1)
+            } 
+        }
     }    
 }

@@ -15,17 +15,22 @@ import { _Validator } from '../utils/helpers/validator.helper';
 const Validator = new _Validator() 
 const Functions = new _publicfunctions() 
 /***********************/
+import {encode, decode} from 'string-encode-decode'
 /***********************/
 export default async function index(fastify: FastifyInstance) {
   fastify.get('/', async (request: FastifyRequest, reply: FastifyReply) => {
         reply.header("Access-Control-Allow-Origin", "*");  
         reply.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); 
         const getchar: string = Functions.getRandomint(5);
+        let en = encode(getchar);
+        let de = decode(en);
         reply.code(200).send({
                                 response: {
                                     message: 'Route GET:Welcome To Application Microservice!', 
                                     status: 1, 
-                                    data:getchar,
+                                    //gen:getchar,
+                                    en:en,
+                                    data:de,
                                     error:"OK",
                                     StatusCode: '200',
                                 }
@@ -36,11 +41,15 @@ export default async function index(fastify: FastifyInstance) {
         reply.header("Access-Control-Allow-Origin", "*");  
         reply.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); 
         const getchar: string = Functions.getRandomint(5);
+        let en = encode(getchar);
+        let de = decode(en);
         reply.code(200).send({
                                     response: {
                                         message: 'Route POST:Welcome To Application Microservice!', 
                                         status: 1, 
-                                        data:getchar,
+                                        //gen:getchar,
+                                        en:en,
+                                        data:de,
                                         error:"OK",
                                         StatusCode: '200',
                                     }

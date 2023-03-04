@@ -165,109 +165,104 @@ export class UserModel {
         .whereRaw('group')
     }
 
-  filter_user(db: knex,filter: any) {
-              const keyword = filter.keyword; 
-              const user_id= filter.user_id; 
-              const type_id = filter.level; 
-              const level= filter.level; 
-              const start= filter.start;
-              const end= filter.end;  
-              const page= filter.pages; 
-              const isCount = filter.isCount;
-              const orderBy = filter.orderBy;
-              const limit = filter.limit; 
-              const perpage = filter.perpage || filter.sizepsge;           
-              if (isCount == 0) {
-                  console.log(`rows filter `, filter); 
-                  console.log(`data keyword `, keyword);
-                  console.log(`rows isCount `, isCount); 
-              } else {
-                  console.log(`data filter `, filter); 
-                  console.log(`data keyword `, keyword);
-                  console.log(`data isCount `, isCount); 
-              }
-              let query = db('sd_users as u');
-                  query = query.innerJoin('user_permission_type as t', 't.permission_type_id', 'u.permission_type_id'); 
-                  //query = query.leftJoin('sd_user_roles as r', 'r.permission_type_id', 't.permission_type_id'); 
-                  if(isCount==1){
-                        query = query.select('u.user_id AS idx');
-                  }else{ 
-                        query = query.select('u.user_id as idx');   
-                        query = query.select('u.firstname');   
-                        query = query.select('u.lastname');  
-                        query = query.select("CONCAT(u.firstname,' ',u.lastname) AS name");
-                        query = query.select('u.fullname');   
-                        query = query.select('u.nickname');   
-                        query = query.select('u.idcard');   
-                        query = query.select('u.date');   
-                        // query = query.select('u.username');   
-                        // query = query.select('u.password');   
-                        query = query.select('u.email');   
-                        query = query.select('u.level');   
-                        // query = query.select('u.status');   
-                        // query = query.select('u.network_id');   
-                        query = query.select('u.avatar');   
-                        query = query.select('u.remark');   
-                        query = query.select('u.infomation_agree_status');   
-                        query = query.select('u.gender');   
-                        query = query.select('u.birthday');   
-                        // query = query.select('u.last_sign_in');   
-                        // query = query.select('u.online_status');   
-                        // query = query.select('u.mesage');   
-                        // query = query.select('u.password_temp');   
-                        // query = query.select('u.profile_id');   
-                        // query = query.select('u.network_type_id');   
-                        // query = query.select('u.public');   
-                        // query = query.select('u.isActive');   
-                        // query = query.select('u.permission_type_id');   
-                        query = query.select('t.type_name as usertype');    
+  filter_user(db: knex, filter: any) {
+    try {
+      const keyword = filter.keyword;
+      const user_id = filter.user_id;
+      const type_id = filter.level;
+      const level = filter.level;
+      const start = filter.start;
+      const end = filter.end;
+      const page = filter.pages;
+      const isCount = filter.isCount;
+      const orderBy = filter.orderBy;
+      const limit = filter.limit;
+      const perpage = filter.perpage || filter.sizepsge;
+      if (isCount == 0) {
+        console.log(`rows filter `, filter);
+        console.log(`data keyword `, keyword);
+        console.log(`rows isCount `, isCount);
+      } else {
+        console.log(`data filter `, filter);
+        console.log(`data keyword `, keyword);
+        console.log(`data isCount `, isCount);
+      }
+      let query = db('sd_users as u');
+          query = query.innerJoin('user_permission_type as t', 't.permission_type_id', 'u.permission_type_id');
+        //query = query.leftJoin('sd_user_roles as r', 'r.permission_type_id', 't.permission_type_id'); 
+      if (isCount == 1) {
+        query = query.select('u.user_id AS idx');
+      } else {
+        query = query.select('u.user_id as idx');
+        query = query.select('u.firstname');
+        query = query.select('u.lastname');
+        //query = query.select("CONCAT(u.firstname,' ',u.lastname) AS name");
+        query = query.select('u.fullname');
+        query = query.select('u.nickname');
+        query = query.select('u.idcard');
+        query = query.select('u.date');
+        // query = query.select('u.username');   
+        // query = query.select('u.password');   
+        query = query.select('u.email');
+        query = query.select('u.level');
+        // query = query.select('u.status');   
+        // query = query.select('u.network_id');   
+        query = query.select('u.avatar');
+        query = query.select('u.remark');
+        query = query.select('u.infomation_agree_status');
+        query = query.select('u.gender');
+        query = query.select('u.birthday');
+        // query = query.select('u.last_sign_in');   
+        // query = query.select('u.online_status');   
+        // query = query.select('u.mesage');   
+        // query = query.select('u.password_temp');   
+        // query = query.select('u.profile_id');   
+        // query = query.select('u.network_type_id');   
+        // query = query.select('u.public');   
+        // query = query.select('u.isActive');   
+        // query = query.select('u.permission_type_id');   
+        query = query.select('t.type_name as usertype');
                     
-                  } 
-                  query = query.where('1=1');
-                  query = query.andWhere('s.status', 1);   
-                  if (user_id!="" || user_id!==0) {  
+      }
+      query = query.where('s.status', 1);
+      if (user_id== null) { }else{
                     
-                  }  
-                  if (type_id!="" || type_id!==0) {  
-                    query = query.andWhere('t.permission_type_id', type_id);   
-                  }  
-                  if (level!="" || level!==0) {  
-                    query = query.andWhere('u.level', level);   
-                  } 
-                  if (keyword!=null) { 
-                      query.andWhere("u.firstname", { keyword: keyword ? `%${keyword}%` : "%" }); 
-                  } 
-                  if (start!=null && end!=null) { 
-                      query.andWhere("u.date BETWEEN '" + start + "' AND '" + end + "'"); 
-                  }   
-                  if (user_id!="" || user_id!==0) {  
-                            query = query.orderBy('u.user_id', 'asc');
-                  }else{
-                          if (orderBy!="" || orderBy!==null) {  
-                                  if (orderBy== 'desc') {  
-                                    query = query.orderBy('u.user_id', 'desc');
-                                  }else{
-                                    query = query.orderBy('u.user_id', 'asc');
-                                  }
-                          }else{
-                                    query = query.orderBy('u.user_id', 'desc');
-                          } 
-  
-                  }
-                  if (perpage!="" && page!="") {   
-                        query = query.limit(perpage);
-                        query = query.offset(page);
-                  }else{
-                        if (limit!="" || limit!==0) {  
-                            query = query.limit(limit);  
-                        } 
-                  } 
-                  if(isCount==1){ 
-                        console.log(`query `, query);
-                        return query;
-                  }else{ 
-                        console.log(`query `, query);
-                        return  query;   
-                  }  
-    }  
+      }
+      if (type_id== null) { }else{
+        query = query.andWhere('t.permission_type_id', type_id);
+      }
+      if (level== null) { }else{
+        query = query.andWhere('u.level', level);
+      }
+      if (keyword== null) { }else{
+        //query.andWhere("u.firstname", { keyword: keyword ? `%${keyword}%` : "%" });
+      }
+      if (start== null && end== null) { }else{
+        query.andWhere("u.date BETWEEN '" + start + "' AND '" + end + "'");
+      }
+      if (user_id == null) {
+        if (orderBy == null) {
+          query = query.orderBy('u.user_id', 'desc');
+        } else {
+          if (orderBy == 'desc') {
+            query = query.orderBy('u.user_id', 'desc');
+          } else {
+            query = query.orderBy('u.user_id', 'asc');
+          }
+        }
+      } else {
+        query = query.orderBy('s.id', 'asc');
+      }
+      if (perpage == null && page == null) { } else {
+        query = query.limit(perpage);
+        query = query.offset(page);
+      }
+      return query;
+    } catch (err: any) {
+      console.log(`err=>`, err);
+      if (err) {
+        process.exit(1)
+      }
+    }
+  }
 }
