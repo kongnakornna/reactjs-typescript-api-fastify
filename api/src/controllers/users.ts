@@ -232,7 +232,6 @@ const APIKEY:any = env.API_KEY
                                         }) 
                     return  // exit process  
         }
-      
       const passwd:any =  Functions.passwordValidator(password);
       if (passwd === false) {
           reply.code(401).send({
@@ -294,7 +293,6 @@ const APIKEY:any = env.API_KEY
             input.mesage = mesage;
             input.password_temp = password;
             input.profile_id = profile_id;
-            
             /*
                 input.network_type_id=network_type_id;
                 input.public=public;

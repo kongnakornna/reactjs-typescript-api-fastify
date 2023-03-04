@@ -19,13 +19,14 @@ const Functions = new _publicfunctions()
 export default async function index(fastify: FastifyInstance) {
   fastify.get('/', async (request: FastifyRequest, reply: FastifyReply) => {
         reply.header("Access-Control-Allow-Origin", "*");  
-        reply.header('Access-Control-Allow-Methods', 'GET');    
+        reply.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); 
         const getchar: string = Functions.getRandomint(5);
         reply.code(200).send({
                                 response: {
-                                    message: 'Welcome To Application Service!', 
+                                    message: 'Route GET:Welcome To Application Microservice!', 
                                     status: 1, 
                                     data:getchar,
+                                    error:"OK",
                                     StatusCode: '200',
                                 }
                           })
@@ -33,13 +34,14 @@ export default async function index(fastify: FastifyInstance) {
   })
   fastify.post('/', async (request: FastifyRequest, reply: FastifyReply) => {
         reply.header("Access-Control-Allow-Origin", "*");  
-        reply.header('Access-Control-Allow-Methods', 'POST'); 
+        reply.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); 
         const getchar: string = Functions.getRandomint(5);
         reply.code(200).send({
                                     response: {
-                                        message: 'Welcome To Application Service!', 
+                                        message: 'Route POST:Welcome To Application Microservice!', 
                                         status: 1, 
                                         data:getchar,
+                                        error:"OK",
                                         StatusCode: '200',
                                     }
                             }) 

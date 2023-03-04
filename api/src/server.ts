@@ -12,8 +12,9 @@ var start = async () => {
     console.log('App :' + app); 
     console.log('App Register :' + app.register); 
     console.log(`App is running at port ${port_main} at ${new Date()}`, process.env.PORT);
-  } catch (error) {
-    console.log('error :' +error)
+  } catch (err) {
+    app.log.error(err)
+    console.log('error :' +err)
     process.exit(1)
   }
 }
