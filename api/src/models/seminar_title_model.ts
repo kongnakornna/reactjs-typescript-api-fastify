@@ -104,7 +104,7 @@ export class SeminarTitleModel {
             }
             if (perpage == null && page == null) { } else {
                 query = query.limit(perpage);
-                query = query.offset(page);
+                query = query.offset(perpage * (page - 1));
             }
             return query;
         } catch (err: any) {

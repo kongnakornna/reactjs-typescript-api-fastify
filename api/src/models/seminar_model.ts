@@ -83,7 +83,7 @@ export class SeminarModels {
                     console.log(`data isCount `, isCount); 
                 }
                 let query = db('seminar_title as s');
-                    query = query.innerJoin('sd_users_narrator as u', 'u.narrator_id', 's.narrator_id');   
+                    query = query.leftJoin('sd_users_narrator as u', 'u.narrator_id', 's.narrator_id');   
                     if(isCount==1){
                         query = query.select('s.id as idx');
                     }else{ 
@@ -131,7 +131,7 @@ export class SeminarModels {
                             query = query.orderBy('s.id', 'asc');
                     } 
                     query = query.limit(perpage);
-                    query = query.offset(page);
+                    query = query.offset(perpage * (page - 1));
             return query;
         } catch (err:any) {
             console.log(`err=>`, err); 
@@ -227,7 +227,7 @@ export class SeminarModels {
                     } 
                 if (perpage == null && page == null) { }else{   
                             query = query.limit(perpage);
-                            query = query.offset(page);
+                            query = query.offset(perpage * (page - 1));
                 } 
             return query;
         } catch (err:any) {
@@ -320,7 +320,7 @@ export class SeminarModels {
                     } 
                 if (perpage == null && page == null) { }else{   
                             query = query.limit(perpage);
-                            query = query.offset(page);
+                            query = query.offset(perpage * (page - 1));
                 } 
             return query;
         } catch (err:any) {
@@ -404,7 +404,7 @@ export class SeminarModels {
                             query = query.orderBy('us.seminar_id', 'asc');
                     }  
                     query = query.limit(perpage);
-                    query = query.offset(page);
+                    query = query.offset(perpage * (page - 1));
                 console.log(`query=>`, query); 
             return query;
         } catch (err: any) {
@@ -510,7 +510,7 @@ export class SeminarModels {
                     } 
                     if (perpage == null && page == null) { }else{   
                             query = query.limit(perpage);
-                            query = query.offset(page);
+                            query = query.offset(perpage * (page - 1));
                     }    
             return query;
         } catch (err:any) {

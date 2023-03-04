@@ -109,7 +109,7 @@ export class SdusersSeminarModel {
                                 query = query.orderBy('us.seminar_id', 'asc');
                         }  
                         query = query.limit(perpage);
-                        query = query.offset(page);
+                        query = query.offset(perpage * (page - 1));
                     console.log(`query=>`, query); 
                 return query;
             } catch (err:any) {
