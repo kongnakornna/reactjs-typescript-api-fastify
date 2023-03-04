@@ -10,7 +10,10 @@ import bodysingupSchema from '../schemas/bodysingup'
 import ActivateSchema from '../schemas/bodyActivate' 
 import queryActivateSchema from '../schemas/queryActivate' 
 import { _publicfunctions } from '../utils/helpers/functions.helper';  
-const Functions  = new _publicfunctions() 
+import { _Validator } from '../utils/helpers/validator.helper';  
+const Validator = new _Validator() 
+const Functions = new _publicfunctions() 
+/***********************/
 var md5 = require('md5');
 export default async function user(fastify: FastifyInstance) {
 const userModel = new UserModel()

@@ -4,7 +4,10 @@ import * as crypto from 'crypto'
 import { UserModel } from '../models/user_model'
 import bodysinginSchema from '../schemas/bodysingin'
 import { _publicfunctions } from '../utils/helpers/functions.helper';  
-const Functions  = new _publicfunctions() 
+import { _Validator } from '../utils/helpers/validator.helper';  
+const Validator = new _Validator() 
+const Functions = new _publicfunctions() 
+/***********************/
 export default async function login(fastify: FastifyInstance) {
   const userModel = new UserModel()
   const db: knex = fastify.db
