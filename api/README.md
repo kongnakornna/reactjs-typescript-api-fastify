@@ -152,6 +152,25 @@ Overall, the software development team is most efficient and effective. The soft
 • Individual development team members may have specific skills and areas of focus. But the responsibility lies with the development team as a whole.
 ```
 
+- Run `pm2 start server.js --name "apiapp" ` #  ติดตั้ง service apiapp ใหม่ บน pm2
+# ############## How to Run PM2 on windows 
+- Run `I: D:\nodejsapp\reactjs-typescript-api-fastify\api\dist`
+- Run `cd D:\nodejsapp\reactjs-typescript-api-fastify\api`   # I:\app\snmpapiv2
+- Run `pm2 list` # ดูว่า มี service ไหม
+- Run `pm2 delete apiapp ` #  ลบ service cmonapp ออก จาก pm2
+- Run `pm2 flush apiapp`  #  ลบ log apiapp ออก จาก pm2
+
+- OR Run `cd dist`
+- OR Run `pm2 start server.js --name "apiapp" ` #  ติดตั้ง service apiapp ใหม่ บน pm2
+ - Run `pm2 monit ` * See how your program is working now, how are you using ram and cpu in real time?
+ - Run `pm2 start dist/server.js --name "apiapp" ` #  ติดตั้ง service apiapp ใหม่ บน pm2
+ - Run `npm install pm2 -g `
+$ pm2 restart app_name
+$ pm2 reload app_name
+$ pm2 stop app_name
+$ pm2 delete app_name
+
+
 
 # ************************
 # Fastify เน้นความเร็ว ในการ  
