@@ -151,3 +151,77 @@ Overall, the software development team is most efficient and effective. The soft
 • Scrum does not recognize sub-teams in the development team. regardless of the specific domain to be managed, such as testing or business analytics. There are no exceptions to this rule.
 • Individual development team members may have specific skills and areas of focus. But the responsibility lies with the development team as a whole.
 ```
+
+
+# ************************
+# Fastify เน้นความเร็ว ในการ  
+# DIY  วางโครงสร้างเอง 
+-- https://www.fastify.io/benchmarks
+-การสร้าง RESTful API `(Application Programming Interface) `ด้วย `Fastify`
+-Run `npm i fastify` 
+-Then create `server.js` and add the following content:
+-Run `npm init fastify` 
+-Run `npm run dev` 
+- ecosystem
+# https://www.fastify.io/ecosystem/
+-การใช้งานปลั๊กอินของ `Fastify` fastify-plugin
+-- Plugins knexjs mysql db
+-- Plugins typeorm mysql db 
+-- Plugins JWT
+-การทำ CRUD กับฐานข้อมูล MySQL
+-knexjs CRUD
+-- Plugins knexjs 
+-- Database connection 
+-- controllers 
+-- CRUD models 
+-- Create  funtion /Insert mysql
+-- Read  funtion /Select mysql  
+-- Update  funtion /update mysql
+-- Delete  funtion /Delete mysql
+-- validation Function , json Schema
+-Typeorm
+-- Plugins typeorm 
+-- Database connection 
+-- Entity manager..
+-- Database-specific column types.
+-- Entity Column form sql Table
+-- Schema declaration in models 
+-- Repositories and custom repositories
+-- Repositories Create  funtion /Insert mysql
+-- Repositories Read  funtion /Select mysql  
+-- Repositories Update  funtion /update mysql
+-- Repositories Delete  funtion /Delete mysql
+-- controllers Include funtion form model
+-- Verify,validation Schema,Function, json Schema
+-การทำ Route validation
+-- mainrouter 
+-- subrouter 
+-- validation in function router
+-- JSON Schema
+-การทำ JWT 
+-- JWT Create Token
+-- JWT Verify Token
+-- JWT Set Time Token
+-- utils  (middleware) Class 2 กลุ่มหลัก
+--- libraries
+---- cache.libraries
+---- rediscache.libraries
+---- redisqueue.libraries
+# https://www.npmjs.com/package/fastify-queue
+--- helpers
+---- validator.helper
+---- function.helper
+
+
+# ************************
+-การใช้งาน SocketIO
+--Plugins SocketIO
+-การใช้งาน WebSocket
+--Plugins WebSocket
+-การอัปโหลดไฟล์
+--fastify-multer
+--mime-types
+--fs-extra
+--path
+--fs
+ 
