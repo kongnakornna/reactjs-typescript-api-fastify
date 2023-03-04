@@ -141,13 +141,13 @@ export default async function seminar(fastify: FastifyInstance) {
                         datainput.status_active = status_active; 
                         const rs: any = await Seminar_Model.seminar_register(db, datainput)
                         let idxs: any = await usersNarratorModel.last_id(db); 
-                        reply.code(200).send({
+                        reply.code(201).send({
                                                 response: { 
                                                     message: "Register datainput",
                                                     status: 1,   
                                                     data:datainput,
                                                     rs:rs, idxs:idxs,
-                                                    StatusCode: '200',
+                                                    StatusCode: '201',
                                                 }
                                     }) 
                         return  // exit process  

@@ -146,12 +146,12 @@ export default async function narrator(fastify: FastifyInstance) {
                         createsignin.lastname = lastname; 
                         createsignin.create = create;  
                         const token = fastify.jwt.sign({ createsignin }, { expiresIn: '1d' });  //use for active status user
-                        reply.code(200).send({
+                        reply.code(201).send({
                                                 response: { 
                                                     message: "Register successful",
                                                     status: 1,  
                                                     token,
-                                                    StatusCode: '200',
+                                                    StatusCode: '201',
                                                 }
                                     }) 
                         return  // exit process    

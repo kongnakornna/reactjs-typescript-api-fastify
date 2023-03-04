@@ -50,8 +50,8 @@ export const serviceunavailable = (res: FastifyReply, data?: any) => res.status(
 
 2×× Success
 
-200 OK
-201 Created
+200 OK // แสดงข้อมูล
+201 Created // เพิ่มข้อมูล
 202 Accepted
 203 Non-authoritative Information
 204 No Content

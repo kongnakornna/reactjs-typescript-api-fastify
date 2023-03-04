@@ -111,12 +111,12 @@ const APIKEY:any = env.API_KEY
                 },{
                     expiresIn: '1d'	// expires in 365 days
                 })
-                reply.code(200).send({
+                reply.code(201).send({
                                     response: {
                                         message: "Create token Successful!",
                                         status: 1, 
                                         ok: true,                                       
-                                        statusCode: '200',
+                                        statusCode: '201',
                                         data: {
                                                   user_id: user.user_id,
                                                   username: user.username,
@@ -131,7 +131,7 @@ const APIKEY:any = env.API_KEY
             } else { 
                 reply.code(401).send({
                                     response: { 
-                                        message: "Login failed!", 
+                                        message: "Login failed! Unauthorized", 
                                         status: 1,
                                         ok: false,
                                         statusCode: '401',
@@ -329,12 +329,12 @@ const APIKEY:any = env.API_KEY
             createsignin.profile_id = profile_id_idx; 
             createsignin.date = dateTime;
             const token = fastify.jwt.sign({ createsignin }, { expiresIn: '365d' });  //use for active status user
-            reply.code(200).send({
+            reply.code(201).send({
                                       response: { 
                                           message: "Sign up  successful",
                                           status: 1,  
                                           token,
-                                          StatusCode: '200',
+                                          StatusCode: '201',
                                       }
                         }) 
             return  // exit process    
@@ -393,12 +393,12 @@ const APIKEY:any = env.API_KEY
                       }) 
     } else if (headers.apikey === APIKEY) { 
                 const token = fastify.jwt.sign({getchar},{ expiresIn: '365d'})
-                reply.code(200).send({
+                reply.code(201).send({
                                     response: { 
                                         message: "create token successful",
                                         status: 1,  
                                         token,
-                                        StatusCode: '200',
+                                        StatusCode: '201',
                                     }
                       }) 
     }else{ 
