@@ -21,6 +21,7 @@ import bodycreatetitle from '../schemas/bodycreatetitle'
 import bodytitleupdate from '../schemas/bodytitleupdate'
 import query_string_titledelete from '../schemas/query_string_titledelete'
 import bodyseminar_detail from '../schemas/bodyseminar_detail'
+import singinseminaruserSchema from '../schemas/bodysinginseminaruser'
 var md5 = require('md5');
 import { _publicfunctions } from '../utils/helpers/functions.helper';  
 import { _Validator } from '../utils/helpers/validator.helper';  
@@ -31,6 +32,7 @@ export default async function seminar(fastify: FastifyInstance) {
     const userModel = new UserModel(); 
     const File_Model = new FileModel(); 
     const usersNarratorModel = new SdusersNarratorModel(); 
+    const SeminarUserModel = new SdusersSeminarModel(); 
     const SeminarModel = new SdusersSeminarModel(); 
     const DetailModel = new SeminarDetailModel(); 
     const TitleModel = new SeminarTitleModel(); 
@@ -70,111 +72,95 @@ export default async function seminar(fastify: FastifyInstance) {
     function getErrorMessage(error: unknown) {
                 return toErrorWithMessage(error).message
     }
-    //create data
-    fastify.post('/singup',{preValidation: [fastify.authenticate],schema: bodyseminarregister},  async (request: FastifyRequest, reply: FastifyReply) => {
+    //create data sd_users_seminar
+    fastify.post('/singup',{schema: registerSchema},  async (request: FastifyRequest, reply: FastifyReply) => {
                 const reportError = ({message}: {message: string}) => {}
                 reply.header("Access-Control-Allow-Origin", "*");  
                 reply.header('Access-Control-Allow-Methods', 'POST'); 
                 const headers: any = request.headers || null;
                 const body: any = request.body;
                 const getchar: string =  Functions.getRandomchar(16);
+                const firstname: string = body.firstname;
+                const lastname: string = body.lastname;
+                const fullname: string = body.fullname;
+                const phonenumber: string = body.phonenumber;
+                const emails: string = body.email; 
                 const today = new Date() 
-                const datetime: string =  Functions.timeConvertermas(today);
-                console.warn(`datetime=> `, datetime); 
-                const seminar_title_id: string = body.seminar_title_id;
-                if (seminar_title_id === null) {
-                    reply.code(401).send({
-                                            response: { 
-                                                message: "Error seminar_title_id is null please input seminar_title_id!", 
-                                                status: 0,  
-                                                StatusCode: '401',
-                                            }
-                                        }) 
-                    return  // exit process  
-                }  
-                const active_datatime: string = body.active_datatime|| 1;
-                const status_active: string = body.status_active|| 1;
-                const period_id: string = body.period_id;
-                if (period_id === null) {
-                    reply.code(401).send({
-                                            response: { 
-                                                message: "Error period_id is null please input period_id!", 
-                                                status: 0,  
-                                                StatusCode: '401',
-                                            }
-                                        }) 
-                    return  // exit process  
-                }  
+                const create = Functions.timeConvertermas(today);
+                const status_user: string = body.status || 0;
+                const date: string = body.date;
+                const active: string = body.active|| 0;
+                const activedate: string = body.activedate || null;
+                const password: string = body.password;
                 const issued_at=Date.now()
                 const timestamp = Date.now()
                 /********************************/
-                const str: any = request.headers.authorization  // token in Bearer  header
-                const token: any = str.replace("Bearer ", "")  
-                const tokendecode: any = fastify.jwt.verify(token) 
-                const jwtdata: any = {}
-                jwtdata.token = tokendecode    
-                const start_token: any = tokendecode.iat;
-                const end_token: any = tokendecode.exp;
-                const data_token: any = tokendecode.data;
-                console.warn(`tokendecode=>`, tokendecode);
-                console.warn(`count=> `, tokendecode.lengt); 
-                var data: any = tokendecode; 
-                const seminar_id: number = data['seminar_id'];
-                var email: string = data['email'];
-                const validation_input: any = {}                          
-                validation_input.seminar_title_id = seminar_title_id; 
-                validation_input.period_id = period_id;  
-                validation_input.seminar_id = seminar_id;
-                validation_input.email = email; 
-                const validation_email: any = await Seminar_Model.check_validate(db,seminar_title_id,seminar_id,period_id);
+                const email: any =  Functions.isemailValid(emails);
+                if (email === false) {
+                    reply.code(401).send({
+                                            response: { 
+                                                message: "Email format checker failed, Please change email!", 
+                                                status: 0,  
+                                                StatusCode: '401',
+                                            }
+                                        }) 
+                    return  // exit process  
+                } 
+                const validation_email: any = await SeminarModel.validation_email(db, emails);
                 if (validation_email.length > 0) {
                                 reply.code(401).send({
                                                         response: { 
-                                                        message: "Register Duplicate , Please change seminar seminar_title_id and seminar_id and period_id", 
+                                                        message: "Email Duplicate , Please change email", 
                                                         status: 0,  
                                                         StatusCode: '200',
                                                         }
                                                     }) 
                                 return  // exit process  
-                } 
+                }
+                console.log("email", emails);
+                const passwd:any =  Functions.passwordValidator(password);
+                if (passwd === false) {
+                    reply.code(401).send({
+                                            response: { 
+                                                message: "Password checker failed!", 
+                                                status: 0,  
+                                                StatusCode: '401',
+                                            }
+                                        }) 
+                    return  // exit process  
+                }  
+                var encPassword = crypto.createHash('md5').update(password).digest('hex'); 
                 try { 
-                        const datainput: any = {}                          
-                        datainput.seminar_title_id = seminar_title_id;
-                        datainput.datetime =  Functions.timeConvertermas(today);
-                        datainput.period_id = period_id;  
-                        datainput.seminar_id = seminar_id; 
-                        datainput.status_active = status_active; 
-                        const rs: any = await Seminar_Model.seminar_register(db, datainput)
-                        let idxs: any = await usersNarratorModel.last_id(db); 
-                        reply.code(201).send({
-                                                response: { 
-                                                    message: "Register datainput",
-                                                    status: 1,   
-                                                    data:datainput,
-                                                    rs:rs, idxs:idxs,
-                                                    StatusCode: '201',
-                                                }
-                                    }) 
-                        return  // exit process  
-                        
+                        const input: any = {}  
+                        input.firstname = firstname;
+                        input.lastname = lastname;
+                        input.fullname = fullname;
+                        input.phonenumber = phonenumber; 
+                        input.email = emails;
+                        input.create = create;
+                        input.active= active;
+                        input.activedate= body.activedate; 
+                        input.password = encPassword;
+                        input.password_temp = password;  
+                        const rs: any = await SeminarModel.create_data(db, input);
+                        let idxs: any = await SeminarModel.last_seminar_id(db);
                         const luser: any = idxs[0]
                         console.log("luser", luser); 
-                        let idx: Number = luser.id;
-                        console.log("idx", idx);    
-                        const input: any = {}  
-                        input.id = idx;
-                        input.seminar_id = seminar_id;
-                        input.seminar_title_id = seminar_title_id;
-                        input.datetime = datetime;
-                        input.period_id = period_id;  
-                        const token = fastify.jwt.sign({ input }, { expiresIn: '1d' });  //use for active status user
-                        reply.code(200).send({
+                        let idx: Number = luser.seminar_id;
+                        console.log("idx", idx);     
+                        const createsignin:any = []
+                        createsignin.seminar_id = idx;
+                        createsignin.email = email;
+                        createsignin.firstname = firstname; 
+                        createsignin.lastname = lastname; 
+                        createsignin.create = create;  
+                        const token = fastify.jwt.sign({ createsignin }, { expiresIn: '1d' });  //use for active status user
+                        reply.code(201).send({
                                                 response: { 
-                                                    message: "Register seminar successful",
+                                                    message: "Register successful",
                                                     status: 1,  
                                                     token,
-                                                    data:datainput,
-                                                    StatusCode: '200',
+                                                    StatusCode: '201',
                                                 }
                                     }) 
                         return  // exit process    
@@ -202,8 +188,234 @@ export default async function seminar(fastify: FastifyInstance) {
                         return  // exit process   
                 }
     }) 
+    fastify.post('/singin',{schema: singinseminaruserSchema},async (request: FastifyRequest, reply: FastifyReply) => {
+                 
+            const reportError = ({message}: {message: string}) => {}
+            reply.header("Access-Control-Allow-Origin", "*");  
+            reply.header('Access-Control-Allow-Methods', 'POST'); 
+            const body: any = request.body;
+            const email: string = body.email;
+            const password: string = body.password; 
+            console.log('email=>',email) 
+            console.log('password=>',password)  
+            var encPassword = crypto.createHash('md5').update(password).digest('hex'); 
+           
+                const rs: any = await SeminarModel.login(db, email, encPassword);
+                console.log('email=>' + email);
+                console.log('password=>' + password);
+                console.log('encPassword=>' + encPassword);
+                console.log('rs=>' + rs);
+                if (rs.length > 0) {
+                    const user: any = rs[0];
+                    console.log(`user=>`, user);
+                    const rss: any = []
+                    rss.seminar_id = user.seminar_id;
+                    rss.email = user.email;
+                    rss.firstname = user.firstname;
+                    rss.lastname = user.lastname;
+                    console.warn(`rss=>`, rss);
+                    let date: any = Date.now()
+                    var nowseconds = new Date().getTime() 
+                    const token = fastify.jwt.sign({
+                        seminar_id: rss.seminar_id,
+                        email: rss.email,
+                        firstname: rss.firstname,
+                        lastname: rss.lastname
+                    }, {
+                        expiresIn: '1d'	// expires in 365 days
+                    })
+                    reply.code(200).send({
+                        response: {
+                            message: "Create token Successful!",
+                            status: 1,
+                            ok: true,
+                            statusCode: '200',
+                            data: {
+                                seminar_id: rss.seminar_id,
+                                email: rss.email,
+                                firstname: rss.firstname,
+                                lastname: rss.lastname
+                            },
+                            token,
+                        }
+                    })
+                    return  // exit process  
+                    
+                } else {
+                    reply.code(401).send({
+                        response: {
+                            message: "Login failed!",
+                            status: 1,
+                            ok: false,
+                            statusCode: '401',
+                            data: null,
+                            token: null,
+                        }
+                    })
+                    return  // exit process  
+                }
+             try {
+             } catch (error: any) { 
+                            reply.code(401).send({
+                                                response: {
+                                                    result: "Error",
+                                                    message: "Error!", 
+                                                    status: 1, 
+                                                    token: null,
+                                                    StatusCode: '401',
+                                                }
+                                        }) 
+                            return  // exit process    
+             }    
+             
+    })
+    fastify.post('/verifytoken', {preValidation: [fastify.authenticate]/*สรวจสอบ Tokem*/}, async (request: FastifyRequest, reply: FastifyReply) => {
+            const headers: any = request.headers;           
+            const body: any = request.body;   
+            const host: any = headers.host;  
+            const secret_key: any = headers.secret_key;
+            const str: any = request.headers.authorization; // token in Bearer  header
+            const token: any = str.replace("Bearer ", "");  
+            const token_bearer: any = fastify.jwt.verify(token); 
+            //console.warn(`token_bearer `, token_bearer);
+            const start_token: any = token_bearer.iat;
+            const end_token: any = token_bearer.exp;
+            //console.warn(`start_token `, start_token);
+            //console.warn(`end_token `, end_token); 
+            let date: any = Date.now();
+            var nowseconds = new Date().getTime();
+            var now: any = nowseconds;
+            var numberValuenow: any = Math.round(now / 1000); 
+            //console.warn(`numberValuenow `, numberValuenow); 
+            let expire_in_time1: number = (end_token - start_token); 
+            let expire_in_time:number = (numberValuenow - end_token); 
+            //console.warn(`expire_in_time `, expire_in_time);
+            var start_date = new Date(start_token * 1000); 
+            //console.warn(`start_date `, start_date);
+            let end_date: any = new Date(end_token * 1000);
+            //console.warn(`end_date `, end_date);
+            let start_date_en: any =  Functions.toEnDate(start_date);
+            let end_date_en: any =   Functions.toEnDate(end_date);
+            let start_date_thai: any =   Functions.toThaiDate(start_date);
+            let end_date_thai: any =  Functions.toThaiDate(end_date);  
+            console.warn(`start_date_en `, start_date_en);
+            console.warn(`end_date_en `, end_date_en);
+            console.warn(`start_date_thai `, start_date_thai);
+            console.warn(`end_date_thai `, end_date_thai);
+            reply.code(200).send({
+                response: {
+                message: "Authenticate verify token successful!", 
+                status: 1,
+                data: token_bearer, 
+                //start_date:start_date,
+                //end_date: end_date,
+                start_date_en:start_date_en,
+                end_date_en:end_date_en,
+                start_date_thai:start_date_thai,
+                end_date_thai:end_date_thai,
+                StatusCode: '200',
+                }
+            })
+            return  // exit process     
+    }) 
+    fastify.post('/activate',{schema: ActivateSchema}, async (request: FastifyRequest, reply: FastifyReply) => {
+            reply.header("Access-Control-Allow-Origin", "*");  
+            reply.header('Access-Control-Allow-Methods', 'POST'); 
+            const headers: any = request.headers;           
+            const body: any = request.body;   
+            const code: string = body.code; 
+            if (code === null) {
+                reply.code(401).send({
+                                            response: { 
+                                                message: "Please input code to activate account!", 
+                                                status: 0,  
+                                                StatusCode: '401',
+                                            }
+                                        }) 
+                    return  // exit process  
+            }   
+            const tokendecode: any = fastify.jwt.verify(code); 
+            //console.warn(`token_bearer `, token_bearer);
+            const start_token: any = tokendecode.iat;
+            const end_token: any = tokendecode.exp;
+            const data_token: any = tokendecode.data;
+            
+            //console.warn(`start_token `, start_token);
+            //console.warn(`end_token `, end_token); 
+            let date: any = Date.now();
+            var nowseconds = new Date().getTime();
+            var now: any = nowseconds;
+            var numberValuenow: any = Math.round(now / 1000); 
+            //console.warn(`numberValuenow `, numberValuenow); 
+            let expire_in_time1: number = (end_token - start_token); 
+            let expire_in_time:number = (numberValuenow - end_token); 
+            //console.warn(`expire_in_time `, expire_in_time);
+            var start_date = new Date(start_token * 1000); 
+            //console.warn(`start_date `, start_date);
+            let end_date: any = new Date(end_token * 1000);
+            //console.warn(`end_date `, end_date);
+            let start_date_en: any =  Functions.toEnDate(start_date);
+            let end_date_en: any =   Functions.toEnDate(end_date);
+            let start_date_thai: any =   Functions.toThaiDate(start_date);
+            let end_date_thai: any =  Functions.toThaiDate(end_date);  
+            console.warn(`start_date_en=>`, start_date_en);
+            console.warn(`end_date_en=>`, end_date_en);
+            console.warn(`start_date_thai=>`, start_date_thai);
+            console.warn(`end_date_thai=>`, end_date_thai);
+            console.warn(`tokendecode=>`, tokendecode);
+            console.warn(`count=> `, tokendecode.lengt); 
+            var data: any = tokendecode;
+            //var firstname: any = data['createsignin']['firstname'];
+            var seminar_id: number = data['createsignin']['seminar_id'];
+            var email: number = data['createsignin']['email'];
+            const today = new Date()
+            const dateTime = Functions.timeConvertermas(today); 
+            const inputupdate = {
+                                status: 1, 
+                                active: 1, 
+                                activedate:dateTime,
+                            }  
+            console.log("inputupdate", inputupdate); 
+            await SeminarModel.activate(db, seminar_id, inputupdate);
+            try {
+                        reply.code(200).send({
+                            response: {
+                                message: "Activate successful!",
+                                status: 1,
+                                StatusCode: '200', 
+                                email:email,
+                                // date_en: start_date_en,
+                                // date_thai: start_date_thai, 
+                                data: data,  
+                            }
+                        })
+                    return  // exit process   
+            } catch (error: any) { 
+                            reply.code(401).send({
+                                                response: {
+                                                    result: "Error",
+                                                    message: "Activate error!", 
+                                                    status: 1, 
+                                                    token: null,
+                                                    StatusCode: '401',
+                                                }
+                                        }) 
+                            return  // exit process    
+            }finally { 
+                        reply.code(403).send({
+                                                response: {
+                                                    result: "Error",
+                                                    message: "Activate ,Error System something!", 
+                                                    status: 1, 
+                                                    token: null,
+                                                    StatusCode: '403',
+                                                }
+                                        }) 
+                            return  // exit process   
+            }
+    })  
     // Enrol course or  register seminar
-    fastify.post('/register',{preValidation: [fastify.authenticate],schema: bodyseminarregister},  async (request: FastifyRequest, reply: FastifyReply) => {
+    fastify.post('/registereminar',{preValidation: [fastify.authenticate],schema: bodyseminarregister},  async (request: FastifyRequest, reply: FastifyReply) => {
                 const reportError = ({message}: {message: string}) => {}
                 reply.header("Access-Control-Allow-Origin", "*");  
                 reply.header('Access-Control-Allow-Methods', 'POST'); 
