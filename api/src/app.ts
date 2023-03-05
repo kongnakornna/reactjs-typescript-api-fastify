@@ -1,19 +1,19 @@
 import * as fastify from 'fastify'
 import * as path from 'path'
-const multer = require('fastify-multer');
-const envPath = path.join(__dirname, './.env');
-require('dotenv').config({ path: envPath });
+const multer = require('fastify-multer')
+const envPath = path.join(__dirname, './.env')
+require('dotenv').config({ path: envPath })
 const packageJSON:any = require('../package.json')
 const port:any = packageJSON.port;
 const env: any = process.env 
-const fileUpload = require('fastify-file-upload');
+const fileUpload = require('fastify-file-upload')
 //console.warn(`packageJSON=>`,  packageJSON);  
 //console.warn(`port=>`,  port);  
 //console.warn(`env=>`, env);   
 import routers from './router/router'
 import fp from 'fastify-plugin';
-
-import fastifySwagger from 'fastify-swagger';
+const fastifySession = require('@fastify/session');
+const fastifyCookie = require('@fastify/cookie');
 const app: fastify.FastifyInstance = fastify.fastify({
   logger: {
     level: 'info'
@@ -28,8 +28,8 @@ app.register(require('fastify-cors'), {
   allowedHeaders: "*",
   methods: "GET,POST,OPTIONS,PUT,DELETE,PATCH"    
 }) 
-app.register(require('fastify-formbody'));
-app.register(fileUpload);
+app.register(require('fastify-formbody'))
+ 
 // register knex
 app.register(require('./plugins/mysqldb'), {
   options: {
@@ -75,6 +75,9 @@ app.register(require('point-of-view'), {
   },
   includeViewExtension: true
 })
+// app.register(fastifyCookie);
+// app.register(fastifySession, {secret: 'fastapi'});
+// app.register(fileUpload)
 app.register(routers, { prefix: `${packageJSON.endPoint}` });
-//app.register(routers) 
+// app.register(routers) 
 export default app
