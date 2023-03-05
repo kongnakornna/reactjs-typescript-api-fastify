@@ -249,3 +249,5 @@ $ pm2 delete app_name
 # https://github.com/huangang/fastify-file-upload
 # https://github.com/greguz/fastify-kubernetes
 # https://github.com/love-lena/fastify-mqtt
+# https://www.npmjs.com/package/minipass-pipeline
+# https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-docker-registry
