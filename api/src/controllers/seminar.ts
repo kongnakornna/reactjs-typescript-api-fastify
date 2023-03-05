@@ -9,6 +9,7 @@ import { SdusersSeminarModel } from '../models/sd_users_seminar_model'
 import { SeminarDetailModel } from '../models/seminar_detail_model'
 import { SeminarTitleModel } from '../models/seminar_title_model'
 import { SeminarModels } from '../models/seminar_model'
+// Validator data by schemas
 import bodyemailSchema from '../schemas/bodyemail'
 import bodysinginSchema from '../schemas/bodysingin'
 import registerSchema from '../schemas/registerSchema'  
@@ -65,6 +66,7 @@ export default async function seminar(fastify: FastifyInstance) {
     function getErrorMessage(error: unknown) {
                 return toErrorWithMessage(error).message
     }
+    //create data
     // Enrol course or  register seminar
     fastify.post('/register',{preValidation: [fastify.authenticate],schema: bodyseminarregister},  async (request: FastifyRequest, reply: FastifyReply) => {
                 const reportError = ({message}: {message: string}) => {}
@@ -197,6 +199,7 @@ export default async function seminar(fastify: FastifyInstance) {
                         return  // exit process   
                 }
     }) 
+    // display information or  select data
     //fastify.get('/usersseminarlist',{preValidation: [fastify.authenticate]},async (request: FastifyRequest, reply: FastifyReply) => {
     fastify.get('/usersseminarlist',async (request: FastifyRequest, reply: FastifyReply) => {
             reply.header("Access-Control-Allow-Origin", "*");  
@@ -733,4 +736,7 @@ export default async function seminar(fastify: FastifyInstance) {
                         return  // exit process    
             }           
     })  
+    //create
+    //update
+    //delete
 } 
