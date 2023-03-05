@@ -244,3 +244,8 @@ $ pm2 delete app_name
 --path
 --fs
  
+
+# https://www.npmjs.com/package/convert-csv-to-json
+# https://github.com/huangang/fastify-file-upload
+# https://github.com/greguz/fastify-kubernetes
+# https://github.com/love-lena/fastify-mqtt
