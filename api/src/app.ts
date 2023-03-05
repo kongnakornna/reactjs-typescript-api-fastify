@@ -7,9 +7,10 @@ const packageJSON:any = require('../package.json')
 const port:any = packageJSON.port;
 const env: any = process.env 
 const fileUpload = require('fastify-file-upload')
-//console.warn(`packageJSON=>`,  packageJSON);  
-//console.warn(`port=>`,  port);  
+//console.warn(`packageJSON=>`,  packageJSON);
+//console.warn(`port=>`,  port);
 //console.warn(`env=>`, env);   
+import WebSocket from 'ws'
 import routers from './router/router'
 import fp from 'fastify-plugin';
 const fastifySession = require('@fastify/session');
@@ -78,6 +79,40 @@ app.register(require('point-of-view'), {
 // app.register(fastifyCookie);
 // app.register(fastifySession, {secret: 'fastapi'});
 // app.register(fileUpload)
+/*
+// websocket
+app.register(require('./plugins/ws'))
+// socket.io
+app.register(require('./plugins/io'), {})
+app.ready((error: any) => {
+  if (error) throw error
+  console.log('WebSocket server running....')
+  app.io.on('connection', (socket: any) => {
+    console.log('user connected!')
+    socket.on('welcome', (message: any) => {
+      socket.emit('welcome', 'Hello from server')
+    })
+    socket.on('chat message', (message: any) => {
+      socket.broadcast.emit('chat message', message)
+    })
+
+  })
+  app.ws.on('connection', (ws: any) => {
+    console.log('Client connected!')
+    ws.on('message', (message: any) => {
+      const clients: any[] = app.ws.clients
+      clients.forEach((client: any) => {
+        if (client.readyState === WebSocket.OPEN) {
+          client.send(message)
+        }
+      })
+
+    })
+  })
+
+})
+
+*/
 app.register(routers, { prefix: `${packageJSON.endPoint}` });
 // app.register(routers) 
 export default app
