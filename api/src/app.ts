@@ -31,6 +31,7 @@ app.register(require('fastify-cors'), {
 }) 
 app.register(require('fastify-formbody'))
  
+
 // register knex database
 app.register(require('./plugins/mysqldb'), {
   options: {
