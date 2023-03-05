@@ -31,7 +31,7 @@ app.register(require('fastify-cors'), {
 }) 
 app.register(require('fastify-formbody'))
  
-// register knex
+// register knex database
 app.register(require('./plugins/mysqldb'), {
   options: {
     client: 'mysql2',
@@ -46,7 +46,7 @@ app.register(require('./plugins/mysqldb'), {
   },
   connectionName: 'db'
 })
-// typeorm
+// typeorm database
 app.register(require('./plugins/typeorm'), {
       options: {
         client: 'mysql',
@@ -109,9 +109,7 @@ app.ready((error: any) => {
 
     })
   })
-
 })
-
 */
 app.register(routers, { prefix: `${packageJSON.endPoint}` });
 // app.register(routers) 
