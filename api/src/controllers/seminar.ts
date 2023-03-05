@@ -17,6 +17,10 @@ import bodyseminarregister from '../schemas/bodyseminarregister'
 import bodysingupSchema from '../schemas/bodysingup'
 import ActivateSchema from '../schemas/bodyActivate' 
 import queryActivateSchema from '../schemas/queryActivate' 
+import bodycreatetitle from '../schemas/bodycreatetitle' 
+import bodytitleupdate from '../schemas/bodytitleupdate'
+import query_string_titledelete from '../schemas/query_string_titledelete'
+import bodyseminar_detail from '../schemas/bodyseminar_detail'
 var md5 = require('md5');
 import { _publicfunctions } from '../utils/helpers/functions.helper';  
 import { _Validator } from '../utils/helpers/validator.helper';  
@@ -67,6 +71,137 @@ export default async function seminar(fastify: FastifyInstance) {
                 return toErrorWithMessage(error).message
     }
     //create data
+    fastify.post('/singup',{preValidation: [fastify.authenticate],schema: bodyseminarregister},  async (request: FastifyRequest, reply: FastifyReply) => {
+                const reportError = ({message}: {message: string}) => {}
+                reply.header("Access-Control-Allow-Origin", "*");  
+                reply.header('Access-Control-Allow-Methods', 'POST'); 
+                const headers: any = request.headers || null;
+                const body: any = request.body;
+                const getchar: string =  Functions.getRandomchar(16);
+                const today = new Date() 
+                const datetime: string =  Functions.timeConvertermas(today);
+                console.warn(`datetime=> `, datetime); 
+                const seminar_title_id: string = body.seminar_title_id;
+                if (seminar_title_id === null) {
+                    reply.code(401).send({
+                                            response: { 
+                                                message: "Error seminar_title_id is null please input seminar_title_id!", 
+                                                status: 0,  
+                                                StatusCode: '401',
+                                            }
+                                        }) 
+                    return  // exit process  
+                }  
+                const active_datatime: string = body.active_datatime|| 1;
+                const status_active: string = body.status_active|| 1;
+                const period_id: string = body.period_id;
+                if (period_id === null) {
+                    reply.code(401).send({
+                                            response: { 
+                                                message: "Error period_id is null please input period_id!", 
+                                                status: 0,  
+                                                StatusCode: '401',
+                                            }
+                                        }) 
+                    return  // exit process  
+                }  
+                const issued_at=Date.now()
+                const timestamp = Date.now()
+                /********************************/
+                const str: any = request.headers.authorization  // token in Bearer  header
+                const token: any = str.replace("Bearer ", "")  
+                const tokendecode: any = fastify.jwt.verify(token) 
+                const jwtdata: any = {}
+                jwtdata.token = tokendecode    
+                const start_token: any = tokendecode.iat;
+                const end_token: any = tokendecode.exp;
+                const data_token: any = tokendecode.data;
+                console.warn(`tokendecode=>`, tokendecode);
+                console.warn(`count=> `, tokendecode.lengt); 
+                var data: any = tokendecode; 
+                const seminar_id: number = data['seminar_id'];
+                var email: string = data['email'];
+                const validation_input: any = {}                          
+                validation_input.seminar_title_id = seminar_title_id; 
+                validation_input.period_id = period_id;  
+                validation_input.seminar_id = seminar_id;
+                validation_input.email = email; 
+                const validation_email: any = await Seminar_Model.check_validate(db,seminar_title_id,seminar_id,period_id);
+                if (validation_email.length > 0) {
+                                reply.code(401).send({
+                                                        response: { 
+                                                        message: "Register Duplicate , Please change seminar seminar_title_id and seminar_id and period_id", 
+                                                        status: 0,  
+                                                        StatusCode: '200',
+                                                        }
+                                                    }) 
+                                return  // exit process  
+                } 
+                try { 
+                        const datainput: any = {}                          
+                        datainput.seminar_title_id = seminar_title_id;
+                        datainput.datetime =  Functions.timeConvertermas(today);
+                        datainput.period_id = period_id;  
+                        datainput.seminar_id = seminar_id; 
+                        datainput.status_active = status_active; 
+                        const rs: any = await Seminar_Model.seminar_register(db, datainput)
+                        let idxs: any = await usersNarratorModel.last_id(db); 
+                        reply.code(201).send({
+                                                response: { 
+                                                    message: "Register datainput",
+                                                    status: 1,   
+                                                    data:datainput,
+                                                    rs:rs, idxs:idxs,
+                                                    StatusCode: '201',
+                                                }
+                                    }) 
+                        return  // exit process  
+                        
+                        const luser: any = idxs[0]
+                        console.log("luser", luser); 
+                        let idx: Number = luser.id;
+                        console.log("idx", idx);    
+                        const input: any = {}  
+                        input.id = idx;
+                        input.seminar_id = seminar_id;
+                        input.seminar_title_id = seminar_title_id;
+                        input.datetime = datetime;
+                        input.period_id = period_id;  
+                        const token = fastify.jwt.sign({ input }, { expiresIn: '1d' });  //use for active status user
+                        reply.code(200).send({
+                                                response: { 
+                                                    message: "Register seminar successful",
+                                                    status: 1,  
+                                                    token,
+                                                    data:datainput,
+                                                    StatusCode: '200',
+                                                }
+                                    }) 
+                        return  // exit process    
+                } catch (error: any) { 
+                        reply.code(401).send({
+                                            response: {
+                                                result: "Error",
+                                                message: "Register Unsuccessful!", 
+                                                status: 1, 
+                                                token: null,
+                                                StatusCode: '401',
+                                            }
+                                    }) 
+                        return  // exit process    
+                }finally {
+                    reply.code(403).send({
+                                            response: {
+                                                result: "Error",
+                                                message: "Sign up Unsuccessful ,Error System something!", 
+                                                status: 1, 
+                                                token: null,
+                                                StatusCode: '403',
+                                            }
+                                    }) 
+                        return  // exit process   
+                }
+    }) 
     // Enrol course or  register seminar
     fastify.post('/register',{preValidation: [fastify.authenticate],schema: bodyseminarregister},  async (request: FastifyRequest, reply: FastifyReply) => {
                 const reportError = ({message}: {message: string}) => {}
@@ -570,6 +705,7 @@ export default async function seminar(fastify: FastifyInstance) {
                         return  // exit process    
             }           
     }) 
+    //select title
     fastify.get('/titlelist',async (request: FastifyRequest, reply: FastifyReply) => {
             reply.header("Access-Control-Allow-Origin", "*");  
             reply.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); 
@@ -736,7 +872,442 @@ export default async function seminar(fastify: FastifyInstance) {
                         return  // exit process    
             }           
     })  
-    //create
-    //update
-    //delete
+    //create title
+    fastify.post('/createtitle',{preValidation: [fastify.authenticate],schema: bodycreatetitle},async (request: FastifyRequest, reply: FastifyReply) => {
+            /******************************/
+            reply.header("Access-Control-Allow-Origin", "*");  
+            reply.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); 
+            try {
+                    const headers: any = request.headers         
+                    const query: any = request.query       
+                    const params: any = request.params        
+                    const body: any = request.body  
+                    const str: any = request.headers.authorization; // token in Bearer  header
+                    const token: any = str.replace("Bearer ", "");  
+                    const token_bearer: any = fastify.jwt.verify(token); 
+                    console.warn(`token_bearer `, token_bearer);
+                    const start_token: any = token_bearer.iat;
+                    const end_token: any = token_bearer.exp;
+                    const host: any = headers.host   
+                    const secret_key: any = headers.secret_key   
+                    /*******************/  
+                    const today = new Date() 
+                    const createdate =  Functions.timeConvertermas(today)
+                    const title = body.title
+                    const narrator_id = body.narrator_id 
+                    const datetime_start = body.datetime_start
+                    const datetime_end = body.datetime_end
+                    const url = body.url
+                    const detail = body.detail
+                    const spake_time = body.spake_time
+                    const location = body.location
+                    const province = body.province
+                    const telephone = body.telephone
+                    const validation_input = body.email  
+                    const validation_email: any = await TitleModel.check_email(db,validation_input);
+                    if (validation_email.length > 0) {
+                                    reply.code(401).send({
+                                                            response: { 
+                                                            message: "Email Duplicate , Please change email", 
+                                                            status: 0,  
+                                                            StatusCode: '200',
+                                                            }
+                                                        }) 
+                                    return  // exit process  
+                    } 
+                    const input: any = {} 
+                    input.title=title || null; 
+                    input.narrator_id = narrator_id || null; 
+                    input.create = createdate;  
+                    input.datetime_start = datetime_start || null; 
+                    input.datetime_end = datetime_end || null; 
+                    input.url=url || null;    
+                    input.detail=detail || null; 
+                    input.spake_time = spake_time || null; 
+                    input.location = location || null;  
+                    input.province = province || null; 
+                    input.telephone = telephone || null; 
+                    input.email=validation_input || null;    
+                    const rows: any = await TitleModel.create_data(db, input); 
+                    reply.code(200).send({
+                                        response: {
+                                            message: "Create date successful!", 
+                                            error:'OK',                                            
+                                            StatusCode: '200',   
+                                            data: null,
+                                        }
+                                        
+                                    })   
+                                    
+                return  // exit process 
+            } catch (err) { 
+                fastify.log.error('err=>', err);
+                if (err) { 
+                    fastify.log.error(err)
+                    // process.exit(1)            
+                    return  // exit process    
+                } 
+                reply.code(500).send({
+                                        response: {
+                                            message: "Eror Result!", 
+                                            error:err,                                            
+                                            StatusCode: '500', 
+                                            data: null,
+                                        }
+                                        
+                                })    
+                        // process.exit(1)            
+                        return  // exit process    
+            }           
+    })  
+    //update title
+    fastify.post('/updatetitle',{preValidation: [fastify.authenticate],schema: bodytitleupdate},async (request: FastifyRequest, reply: FastifyReply) => {
+            /******************************/
+            reply.header("Access-Control-Allow-Origin", "*");  
+            reply.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); 
+            try {
+                    const headers: any = request.headers         
+                    const query: any = request.query       
+                    const params: any = request.params        
+                    const body: any = request.body  
+                    const str: any = request.headers.authorization; // token in Bearer  header
+                    const token: any = str.replace("Bearer ", "");  
+                    const token_bearer: any = fastify.jwt.verify(token); 
+                    console.warn(`token_bearer `, token_bearer);
+                    const start_token: any = token_bearer.iat;
+                    const end_token: any = token_bearer.exp;
+                    const host: any = headers.host   
+                    const secret_key: any = headers.secret_key   
+                    /*******************/  
+                    const today = new Date() 
+                    const createdate =  Functions.timeConvertermas(today)
+                    const id = body.id
+                    const title = body.title
+                    const narrator_id = body.narrator_id 
+                    const datetime_start = body.datetime_start
+                    const datetime_end = body.datetime_end
+                    const url = body.url
+                    const detail = body.detail
+                    const spake_time = body.spake_time
+                    const location = body.location
+                    const province = body.province
+                    const telephone = body.telephone
+                    const validation_input = body.email  
+                    const validation_email: any = await TitleModel.check_email(db,validation_input);
+                    if (validation_email.length > 0) {
+                                    reply.code(401).send({
+                                                            response: { 
+                                                            message: "Email Duplicate , Please change email", 
+                                                            status: 0,  
+                                                            StatusCode: '200',
+                                                            }
+                                                        }) 
+                                    return  // exit process  
+                    } 
+                    const input: any = {} 
+                    input.title=title; 
+                    input.narrator_id = narrator_id; 
+                    input.create = createdate;  
+                    input.datetime_start = datetime_start; 
+                    input.datetime_end = datetime_end 
+                    input.url=url;    
+                    input.detail=detail; 
+                    input.spake_time = spake_time; 
+                    input.location = location;  
+                    input.province = province; 
+                    input.telephone = telephone; 
+                    input.email=validation_input;    
+                    const rows: any = await TitleModel.update_by_id(db,id,input); 
+                    reply.code(200).send({
+                                        response: {
+                                            message: "Create date successful!", 
+                                            error:'OK',                                            
+                                            StatusCode: '200',   
+                                            data: null,
+                                        }
+                                        
+                                    })   
+                                    
+                return  // exit process 
+            } catch (err) { 
+                fastify.log.error('err=>', err);
+                if (err) { 
+                    fastify.log.error(err)
+                    // process.exit(1)            
+                    return  // exit process    
+                } 
+                reply.code(500).send({
+                                        response: {
+                                            message: "Eror Result!", 
+                                            error:err,                                            
+                                            StatusCode: '500', 
+                                            data: null,
+                                        }
+                                        
+                                })    
+                        // process.exit(1)            
+                        return  // exit process    
+            }           
+    }) 
+    //delete title
+    fastify.get('/deletetitle',{preValidation: [fastify.authenticate],schema: query_string_titledelete},async (request: FastifyRequest, reply: FastifyReply) => {
+            /******************************/
+            reply.header("Access-Control-Allow-Origin", "*");  
+            reply.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); 
+            try {
+                    const headers: any = request.headers         
+                    const query: any = request.query       
+                    const params: any = request.params        
+                    const body: any = request.body  
+                    const str: any = request.headers.authorization; // token in Bearer  header
+                    const token: any = str.replace("Bearer ", "");  
+                    const token_bearer: any = fastify.jwt.verify(token); 
+                    console.warn(`token_bearer `, token_bearer);
+                    const start_token: any = token_bearer.iat;
+                    const end_token: any = token_bearer.exp;
+                    const host: any = headers.host   
+                    const secret_key: any = headers.secret_key   
+                    /*******************/  
+                    const today = new Date() 
+                    const createdate =  Functions.timeConvertermas(today)
+                    const id = body.id 
+                    const validation_id: any = await TitleModel.check_data_by_id(db,id);
+                    if (validation_id.length==0) {
+                                    reply.code(401).send({
+                                                            response: { 
+                                                            message: "Id not found", 
+                                                            status: 0,  
+                                                            StatusCode: '200',
+                                                            }
+                                                        }) 
+                                    return  // exit process  
+                    }  
+                    const rt: any = await TitleModel.remove_by_id(db, id); 
+                    reply.code(200).send({
+                                        response: {
+                                            message: "Delete date successful!", 
+                                            error:'OK',                                            
+                                            StatusCode: '200',   
+                                            data: null,
+                                        }
+                                        
+                                    })   
+                                    
+                return  // exit process 
+            } catch (err) { 
+                fastify.log.error('err=>', err);
+                if (err) { 
+                    fastify.log.error(err)
+                    // process.exit(1)            
+                    return  // exit process    
+                } 
+                reply.code(500).send({
+                                        response: {
+                                            message: "Eror Result!", 
+                                            error:err,                                            
+                                            StatusCode: '500', 
+                                            data: null,
+                                        }
+                                        
+                                })    
+                        // process.exit(1)            
+                        return  // exit process    
+            }           
+    }) 
+    // create seminar_detail
+    fastify.post('/createseminardetail',{preValidation: [fastify.authenticate],schema: bodyseminar_detail},async (request: FastifyRequest, reply: FastifyReply) => {
+            /******************************/
+            reply.header("Access-Control-Allow-Origin", "*");  
+            reply.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); 
+            try {
+                    const headers: any = request.headers         
+                    const query: any = request.query       
+                    const params: any = request.params        
+                    const body: any = request.body  
+                    const str: any = request.headers.authorization; // token in Bearer  header
+                    const token: any = str.replace("Bearer ", "");  
+                    const token_bearer: any = fastify.jwt.verify(token); 
+                    console.warn(`token_bearer `, token_bearer);
+                    const start_token: any = token_bearer.iat;
+                    const end_token: any = token_bearer.exp;
+                    const host: any = headers.host   
+                    const secret_key: any = headers.secret_key   
+                    /*******************/  
+                    const today = new Date() 
+                    const seminar_title_id = body.seminar_title_id
+                    const title = body.title  
+                    const cteate =  Functions.timeConvertermas(today)
+                    const datetime =  Functions.timeConvertermas(today) 
+                    const startdate = body.startdate
+                    const enddate = body.enddate  
+                    const input: any = {} 
+                    input.seminar_title_id=seminar_title_id; 
+                    input.title = title;  
+                    input.cteate = cteate; 
+                    input.datetime = datetime;   
+                    input.startdate=startdate || null; 
+                    input.enddate = enddate || null;  
+                    const rows: any = await DetailModel.create_data(db, input); 
+                    reply.code(200).send({
+                                        response: {
+                                            message: "Create date successful!", 
+                                            error:'OK',                                            
+                                            StatusCode: '200',   
+                                            data: null,
+                                        }
+                                        
+                                    })   
+                                    
+                return  // exit process 
+            } catch (err) { 
+                fastify.log.error('err=>', err);
+                if (err) { 
+                    fastify.log.error(err)
+                    // process.exit(1)            
+                    return  // exit process    
+                } 
+                reply.code(500).send({
+                                        response: {
+                                            message: "Eror Result!", 
+                                            error:err,                                            
+                                            StatusCode: '500', 
+                                            data: null,
+                                        }
+                                        
+                                })    
+                        // process.exit(1)            
+                        return  // exit process    
+            }           
+    })  
+    // update seminar_detail
+    fastify.post('/updateseminardetail',{preValidation: [fastify.authenticate],schema: bodyseminar_detail},async (request: FastifyRequest, reply: FastifyReply) => {
+            /******************************/
+            reply.header("Access-Control-Allow-Origin", "*");  
+            reply.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); 
+            try {
+                    const headers: any = request.headers         
+                    const query: any = request.query       
+                    const params: any = request.params        
+                    const body: any = request.body  
+                    const str: any = request.headers.authorization; // token in Bearer  header
+                    const token: any = str.replace("Bearer ", "");  
+                    const token_bearer: any = fastify.jwt.verify(token); 
+                    console.warn(`token_bearer `, token_bearer);
+                    const start_token: any = token_bearer.iat;
+                    const end_token: any = token_bearer.exp;
+                    const host: any = headers.host   
+                    const secret_key: any = headers.secret_key   
+                    /*******************/  
+                    const today = new Date() 
+                    const id = body.id
+                    const seminar_title_id = body.seminar_title_id
+                    const title = body.title  
+                    const cteate =  Functions.timeConvertermas(today)
+                    const datetime =  Functions.timeConvertermas(today) 
+                    const startdate = body.startdate
+                    const enddate = body.enddate  
+                    const input: any = {} 
+                    input.seminar_title_id=seminar_title_id; 
+                    input.title = title;  
+                    input.cteate = cteate; 
+                    input.datetime = datetime;   
+                    input.startdate=startdate || null; 
+                    input.enddate = enddate || null;   
+                    const rows: any = await DetailModel.update_by_id(db,id,input); 
+                    reply.code(200).send({
+                                        response: {
+                                            message: "Update date successful!", 
+                                            error:'OK',                                            
+                                            StatusCode: '200',   
+                                            data: null,
+                                        }
+                                        
+                                    })   
+                                    
+                return  // exit process 
+            } catch (err) { 
+                fastify.log.error('err=>', err);
+                if (err) { 
+                    fastify.log.error(err)
+                    // process.exit(1)            
+                    return  // exit process    
+                } 
+                reply.code(500).send({
+                                        response: {
+                                            message: "Eror Result!", 
+                                            error:err,                                            
+                                            StatusCode: '500', 
+                                            data: null,
+                                        }
+                                        
+                                })    
+                        // process.exit(1)            
+                        return  // exit process    
+            }           
+    })  
+    // delete seminar_detail
+    fastify.get('/deleteseminardetail',{preValidation: [fastify.authenticate],schema: query_string_titledelete},async (request: FastifyRequest, reply: FastifyReply) => {
+            /******************************/
+            reply.header("Access-Control-Allow-Origin", "*");  
+            reply.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); 
+            try {
+                    const headers: any = request.headers         
+                    const query: any = request.query       
+                    const params: any = request.params        
+                    const body: any = request.body  
+                    const str: any = request.headers.authorization; // token in Bearer  header
+                    const token: any = str.replace("Bearer ", "");  
+                    const token_bearer: any = fastify.jwt.verify(token); 
+                    console.warn(`token_bearer `, token_bearer);
+                    const start_token: any = token_bearer.iat;
+                    const end_token: any = token_bearer.exp;
+                    const host: any = headers.host   
+                    const secret_key: any = headers.secret_key   
+                    /*******************/  
+                    const today = new Date() 
+                    const createdate =  Functions.timeConvertermas(today)
+                    const id = body.id 
+                    const validation_id: any = await DetailModel.check_data_by_id(db,id);
+                    if (validation_id.length==0) {
+                                    reply.code(401).send({
+                                                            response: { 
+                                                            message: "Id not found", 
+                                                            status: 0,  
+                                                            StatusCode: '200',
+                                                            }
+                                                        }) 
+                                    return  // exit process  
+                    }  
+                    const rt: any = await DetailModel.remove_by_id(db, id); 
+                    reply.code(200).send({
+                                        response: {
+                                            message: "Delete date successful!", 
+                                            error:'OK',                                            
+                                            StatusCode: '200',   
+                                            data: null,
+                                        }
+                                        
+                                    })   
+                                    
+                return  // exit process 
+            } catch (err) { 
+                fastify.log.error('err=>', err);
+                if (err) { 
+                    fastify.log.error(err)
+                    // process.exit(1)            
+                    return  // exit process    
+                } 
+                reply.code(500).send({
+                                        response: {
+                                            message: "Eror Result!", 
+                                            error:err,                                            
+                                            StatusCode: '500', 
+                                            data: null,
+                                        }
+                                        
+                                })    
+                        // process.exit(1)            
+                        return  // exit process    
+            }           
+    }) 
 } 

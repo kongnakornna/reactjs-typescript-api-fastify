@@ -21,6 +21,11 @@ export class SeminarTitleModel {
         .select('*')
         .where('id', id)
     }
+    check_email(db: knex, email: any) {
+        return db('seminar_title')
+        .select('*')
+        .where('email', email)
+    }
     remove_by_id(db: knex, id: any) {
             return db('seminar_title')
             .where('id', id)
