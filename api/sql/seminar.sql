@@ -11,7 +11,7 @@
  Target Server Version : 101101 (10.11.1-MariaDB)
  File Encoding         : 65001
 
- Date: 05/03/2023 03:20:32
+ Date: 06/03/2023 04:13:31
 */
 
 SET NAMES utf8mb4;
@@ -5434,7 +5434,7 @@ CREATE TABLE `seminar_title`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
   `narrator_id` int(11) NULL DEFAULT NULL,
-  `cteate` datetime NULL DEFAULT NULL,
+  `create` datetime NULL DEFAULT NULL,
   `datetime_start` datetime NULL DEFAULT NULL,
   `datetime_end` datetime NULL DEFAULT NULL,
   `url` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
