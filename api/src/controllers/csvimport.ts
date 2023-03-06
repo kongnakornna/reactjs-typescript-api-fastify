@@ -473,8 +473,14 @@ export default async function csvimport(fastify: FastifyInstance) {
                                             if (validation_email_count > 0) { 
                                                 input.seminar_id = seminar_id; 
                                                 input.validation_email_count = validation_email_count; 
-                                                tempData.push(input); 
+                                               // tempData.push(input); 
                                             } else { 
+                                                const rs_insert: any = await SeminarModel.create_data(db, input);
+                                                let idxs: any = await SeminarModel.last_seminar_id(db);
+                                                const luser: any = idxs[0]
+                                                console.log("luser", luser); 
+                                                let idx: Number = luser.seminar_id;
+                                                console.log("idx", idx);    
                                                 tempData.push(input); 
                                             }  
                                 }
