@@ -473,15 +473,31 @@ export default async function csvimport(fastify: FastifyInstance) {
                                             if (validation_email_count > 0) { 
                                                 input.seminar_id = seminar_id; 
                                                 input.validation_email_count = validation_email_count; 
-                                               // tempData.push(input); 
-                                            } else { 
-                                                const rs_insert: any = await SeminarModel.create_data(db, input);
+                                                tempData.push(input); 
+                                            } else {  
+                                                let inputs: any ={
+                                                        firstname: firstname,
+                                                        lastname:lastname, 
+                                                        phonenumber: phonenumber, 
+                                                        email: emails,
+                                                        create: create,
+                                                        status: status,
+                                                        active: active,
+                                                        activedate: activedate || 0,
+                                                        password: password,
+                                                        password_tem: password_tem,
+                                                    } 
+                                                await SeminarModel.create_data(db, inputs);
+                                                console.log("inputs", inputs) 
+                                                /*
                                                 let idxs: any = await SeminarModel.last_seminar_id(db);
                                                 const luser: any = idxs[0]
                                                 console.log("luser", luser); 
                                                 let idx: Number = luser.seminar_id;
-                                                console.log("idx", idx);    
-                                                tempData.push(input); 
+                                                console.log("inputs", inputs) 
+                                                console.log("idx", idx); 
+                                                */
+                                                tempData.push(inputs); 
                                             }  
                                 }
                             const resultData: any = tempData; 
