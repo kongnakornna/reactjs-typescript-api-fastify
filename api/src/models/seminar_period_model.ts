@@ -239,7 +239,7 @@ export class SeminarPeriodModel {
                 const title_id = filter.title_id; 
                 const seminar_id= filter.seminar_id; 
                 const email= filter.email;
-                const start= filter.start || 1;
+                const start= filter.start;
                 const end = filter.end;   
                 const page= filter.pages; 
                 const isCount = filter.isCount;
@@ -269,8 +269,8 @@ export class SeminarPeriodModel {
                         //query = query.select('s.title as detail_name');  
                         //query = query.select('t.detail as title_detail');  
                         query = query.select('t.url as title_url');  
-                        query = query.select('s.startdate as startdate'); 
-                        query = query.select('s.enddate as enddate');  
+                        query = query.select('t.datetime_start as startdate'); 
+                        query = query.select('t.datetime_end as enddate');  
                         //query = query.select("CONCAT(u.firstname,' ',u.lastname) as narrator_name");
                         query = query.select('u.fullname as narrator_fullname');   
                         query = query.select('u.nickname as narrator_nickname');     
@@ -281,7 +281,7 @@ export class SeminarPeriodModel {
                         query = query.select('us.email as email_seminar'); 
                         //query = query.select("CONCAT(us.firstname,' ',us.lastname) as fullname_semina");    
                     } 
-                    query = query.where('u.status', status);   
+                    query = query.where('us.status', status);   
                     if (seminar_id=="" || seminar_id==null){}else{  
                             query = query.andWhere('us.seminar_id', seminar_id);
                     } 
