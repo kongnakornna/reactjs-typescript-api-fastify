@@ -1015,7 +1015,9 @@ export default async function seminar(fastify: FastifyInstance) {
                         const firstname: string = ResultArray[key].firstname; 
                         const lastname: string = ResultArray[key].lastname;  
                         const fullname: string = ResultArray[key].fullname;  
-                        const date: string = ResultArray[key].date;   
+                        const date: string = ResultArray[key].date;  
+                        const start: string = Functions.timeConvertermas(ResultArray[key].start);  
+                        const end: string = Functions.timeConvertermas(ResultArray[key].end);   
                         const filter2: any = {}  
                         filter2.title_id = title_id || null;  
                         const detail: any = await Seminar_Model.seminar_detail(db, filter2); 
@@ -1035,10 +1037,12 @@ export default async function seminar(fastify: FastifyInstance) {
                         }
                         const data = { 
                                     title_id : title_id,
-                                    title: title, 
-                                    fullname_narrator: firstname+' '+lastname, 
+                                    title: title,  
+                                    full_name_narrator: firstname+' '+lastname, 
+                                    start: start, 
+                                    end: end,  
                                     date: Functions.timeConvertermas(date),   
-                                   detail: tempDataDetail, 
+                                    detail: tempDataDetail, 
                                 } 
                         tempData.push(data); 
                     }
@@ -1117,6 +1121,7 @@ export default async function seminar(fastify: FastifyInstance) {
                     const telephone = body.telephone
                     const validation_input = body.email  
                     const validation_email: any = await TitleModel.check_email(db,validation_input);
+                    /*
                     if (validation_email.length > 0) {
                                     reply.code(401).send({
                                                             response: { 
@@ -1127,6 +1132,7 @@ export default async function seminar(fastify: FastifyInstance) {
                                                         }) 
                                     return  // exit process  
                     } 
+                    */
                     const input: any = {} 
                     input.title=title || null; 
                     input.narrator_id = narrator_id || null; 
@@ -1205,17 +1211,19 @@ export default async function seminar(fastify: FastifyInstance) {
                     const province = body.province
                     const telephone = body.telephone
                     const validation_input = body.email  
-                    const validation_email: any = await TitleModel.check_email(db,validation_input);
-                    if (validation_email.length > 0) {
-                                    reply.code(401).send({
-                                                            response: { 
-                                                            message: "Email Duplicate , Please change email", 
-                                                            status: 0,  
-                                                            StatusCode: '200',
-                                                            }
-                                                        }) 
-                                    return  // exit process  
+                    const validation_email: any = await TitleModel.check_email(db, validation_input);
+                    /*
+                        if (validation_email.length > 0) {
+                                        reply.code(401).send({
+                                                                response: { 
+                                                                message: "Email Duplicate , Please change email", 
+                                                                status: 0,  
+                                                                StatusCode: '200',
+                                                                }
+                                                            }) 
+                                        return  // exit process  
                     } 
+                    */
                     const input: any = {} 
                     input.title=title; 
                     input.narrator_id = narrator_id; 
@@ -1282,12 +1290,12 @@ export default async function seminar(fastify: FastifyInstance) {
                     /*******************/  
                     const today = new Date() 
                     const createdate =  Functions.timeConvertermas(today)
-                    const id = body.id 
+                    const id = query.id 
                     const validation_id: any = await TitleModel.check_data_by_id(db,id);
                     if (validation_id.length==0) {
                                     reply.code(401).send({
                                                             response: { 
-                                                            message: "Id not found", 
+                                                            message: "id not found", 
                                                             status: 0,  
                                                             StatusCode: '200',
                                                             }

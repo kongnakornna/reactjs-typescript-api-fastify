@@ -95,7 +95,8 @@ export class SeminarModels {
                         query = query.select('u.nickname');    
                         query = query.select('u.date');       
                         query = query.select('u.email');     
-                    
+                        query = query.select('s.datetime_start as start');  
+                        query = query.select('s.datetime_end as end');  
                     } 
                     query = query.where('u.status', status);   
                     if (title_id== null) { }else{
@@ -105,10 +106,10 @@ export class SeminarModels {
                         query = query.andWhere('u.narrator_id', narrator_id);   
                     }  
                     if (email== null) { }else{  
-                        query = query.andWhere('u.emai"', 'like', `%${email}%`); 
+                        query = query.andWhere('u.emai', 'like', `%${email}%`); 
                     }  
                     if (keyword==null) { }else{ 
-                         query = query.andWhere('s.title"', 'like', `%${keyword}%`); 
+                         query = query.andWhere('s.title', 'like', `%${keyword}%`); 
                     } 
                     if (start==null && end==null) { }else{ 
                          query = query.whereBetween("s.datetime_start", [start, end]);  
