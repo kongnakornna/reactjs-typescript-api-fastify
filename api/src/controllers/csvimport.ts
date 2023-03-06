@@ -489,14 +489,14 @@ export default async function csvimport(fastify: FastifyInstance) {
                                                     } 
                                                 await SeminarModel.create_data(db, inputs);
                                                 console.log("inputs", inputs) 
-                                                /*
+                                                 
                                                 let idxs: any = await SeminarModel.last_seminar_id(db);
                                                 const luser: any = idxs[0]
                                                 console.log("luser", luser); 
                                                 let idx: Number = luser.seminar_id;
                                                 console.log("inputs", inputs) 
                                                 console.log("idx", idx); 
-                                                */
+                                                 
                                                 tempData.push(inputs); 
                                             }  
                                 }
