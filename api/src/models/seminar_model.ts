@@ -1,15 +1,6 @@
 import * as knex from 'knex';
 /**************************************************/    
 export class SeminarModels {
-    /* seminarregister
-        id
-        seminar_title_id seminar_title_id
-        datetime
-        period_id
-        seminar_id
-        active_datatime
-        status_active
-    */
     seminar_register(db: knex, data: any) {
         return db('seminarregister')
         .insert(data)

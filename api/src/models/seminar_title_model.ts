@@ -89,7 +89,7 @@ export class SeminarTitleModel {
                 query = query.andWhere('s.title', 'like', `%${keyword}%`); 
             } 
             if (start == null || end == null) {}else{ 
-                query = query.andWhereBetween("u.datetime_start ", [start, end]); 
+                query = query.andWhereBetween("u.datetime_start", [start, end]); 
             }
             if (start_event_end == null || end_event_end == null) {}else{ 
                 query = query.andWhereBetween("u.datetime_end", [start_event_end, end_event_end]); 

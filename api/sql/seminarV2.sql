@@ -11,7 +11,7 @@
  Target Server Version : 101101 (10.11.1-MariaDB)
  File Encoding         : 65001
 
- Date: 06/03/2023 09:55:48
+ Date: 06/03/2023 11:09:03
 */
 
 SET NAMES utf8mb4;
@@ -3106,7 +3106,7 @@ CREATE TABLE `sd_users`  (
 -- ----------------------------
 INSERT INTO `sd_users` VALUES (1, 'kongnakorn', 'jantakun', 'Nakorn', 'Na', NULL, '2023-02-24 02:06:31', 'kongnakornna', '5ef4a6b0978ba16708d5e59238f53026', 'kongnakornna@gmail.com', 0, 1, NULL, NULL, 'dev', 0, 1, NULL, '2023-02-04 04:17:08', 0, NULL, 'Na@5371@#@#', '55a54008ad1ba589aa210d2629c1df41', 0, 0, 1, 3);
 INSERT INTO `sd_users` VALUES (2, 'kongnakorn', 'jantakun', 'Nakorn', 'Na', NULL, '2023-03-04 04:19:50', 'kongnakornna2', '5ef4a6b0978ba16708d5e59238f53026', 'kongnakornna2@gmail.com', 0, 1, NULL, NULL, 'dev', 0, 1, NULL, '2023-02-04 04:20:05', 0, NULL, 'Na@5371@#@#', '9e688c58a5487b8eaf69c9e1005ad0bf', 0, 0, 1, 3);
-INSERT INTO `sd_users` VALUES (3, 'kongnakorn', 'jantakun', 'Nakorn', 'Na', NULL, '2023-03-04 04:22:33', 'kongnakornna1', '5ef4a6b0978ba16708d5e59238f53026', 'kongnakornna1@gmail.com', 0, 1, NULL, NULL, 'dev', 0, 1, NULL, '2023-02-04 15:26:27', 0, NULL, 'Na@5371@#@#', '8666683506aacd900bbd5a74ac4edf68', 0, 0, 1, 3);
+INSERT INTO `sd_users` VALUES (3, 'kongnakorn', 'jantakun', 'Nakorn', 'Na', NULL, '2023-03-04 04:22:33', 'kongnakornna1', '5ef4a6b0978ba16708d5e59238f53026', 'kongnakornna1@gmail.com', 0, 1, NULL, NULL, 'dev', 0, 1, NULL, '2023-02-06 10:21:16', 0, NULL, 'Na@5371@#@#', '8666683506aacd900bbd5a74ac4edf68', 0, 0, 1, 3);
 
 -- ----------------------------
 -- Table structure for sd_users_address
@@ -4368,13 +4368,13 @@ CREATE TABLE `seminar_detail`  (
   `startdate` datetime NULL DEFAULT NULL,
   `enddate` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of seminar_detail
 -- ----------------------------
 INSERT INTO `seminar_detail` VALUES (1, 1, '1. ทำความรู้จักการบริหารโครงการแบบ Agile ด้วยวิธี Scrum', '2023-02-27', '2023-02-27 22:55:28', 'เรียนจะเข้าใจเนื้อหาพื้นฐานที่สำคัญของ Agile ด้วยวิธี Scrum เพื่อเป็นแนวทางการพัฒนานวัตกรรมการทำงานและบริหารโครงการซอฟต์แวร์ที่ดีได้', '2023-02-27 22:55:28', '2023-02-27 22:55:28');
-INSERT INTO `seminar_detail` VALUES (2, 1, '2. ส่ิงที่ต้องใช้ในการบริหารโครงการแบบ Agile ด้วยวิธี Scrum', '2023-02-27', '2023-02-27 22:55:28', 'เรียนจะเข้าใจเนื้อหาพื้นฐานที่สำคัญของ Agile ด้วยวิธี Scrum เพื่อเป็นแนวทางการพัฒนานวัตกรรมการทำงานและบริหารโครงการซอฟต์แวร์ที่ดีได้', '2023-02-27 22:55:28', '2023-02-27 22:55:28');
+INSERT INTO `seminar_detail` VALUES (2, 1, '2.สิ่งที่ต้องใช้ในการบริหารโครงการแบบ Agile ด้วยวิธี Scrum', '2023-02-06', '2023-02-06 10:57:47', '2.สิ่งที่ต้องใช้ในการบริหารโครงการแบบ Agile ด้วยวิธี Scrum', '2023-01-27 22:55:28', '2023-02-27 22:55:28');
 INSERT INTO `seminar_detail` VALUES (3, 1, '3. หน้าที่ของ Product Owner', '2023-02-27', '2023-02-27 22:55:28', 'เรียนจะเข้าใจเนื้อหาพื้นฐานที่สำคัญของ Agile ด้วยวิธี Scrum เพื่อเป็นแนวทางการพัฒนานวัตกรรมการทำงานและบริหารโครงการซอฟต์แวร์ที่ดีได้', '2023-02-27 22:55:28', '2023-02-27 22:55:28');
 INSERT INTO `seminar_detail` VALUES (4, 1, '4. หน้าที่ของ Scrum Master', '2023-02-27', '2023-02-27 22:55:28', 'เรียนจะเข้าใจเนื้อหาพื้นฐานที่สำคัญของ Agile ด้วยวิธี Scrum เพื่อเป็นแนวทางการพัฒนานวัตกรรมการทำงานและบริหารโครงการซอฟต์แวร์ที่ดีได้', '2023-02-27 22:55:28', '2023-02-27 22:55:28');
 INSERT INTO `seminar_detail` VALUES (5, 1, '5. หน้าที่ของ Scrum Team', '2023-02-27', '2023-02-27 22:55:28', 'เรียนจะเข้าใจเนื้อหาพื้นฐานที่สำคัญของ Agile ด้วยวิธี Scrum เพื่อเป็นแนวทางการพัฒนานวัตกรรมการทำงานและบริหารโครงการซอฟต์แวร์ที่ดีได้', '2023-02-27 22:55:28', '2023-02-27 22:55:28');
@@ -4387,6 +4387,44 @@ INSERT INTO `seminar_detail` VALUES (11, 1, '11. ขั้นตอนที่ 
 INSERT INTO `seminar_detail` VALUES (12, 1, '12. เครื่องมือ Scrum Task Board', '2023-02-27', '2023-02-27 22:55:28', 'ผู้เรียนสามารถนำความรู้ที่ได้ไปประยุกต์ใช้ทำ Software Projects หรือ Business Projects ต่าง ๆ ได้ ในการเรียนและการทำงานจริงได้', '2023-02-27 22:55:28', '2023-02-27 22:55:28');
 INSERT INTO `seminar_detail` VALUES (13, 1, '13. เครื่องมือ Burndown Chart', '2023-02-27', '2023-02-27 22:55:28', 'ผู้เรียนสามารถนำความรู้ที่ได้ไปประยุกต์ใช้ทำ Software Projects หรือ Business Projects ต่าง ๆ ได้ ในการเรียนและการทำงานจริงได้', '2023-02-27 22:55:28', '2023-02-27 22:55:28');
 INSERT INTO `seminar_detail` VALUES (14, 2, 'Learn Docker, Docker Compose, Multi-Container Projects, Deployment and all about Kubernetes', '2023-03-05', '2023-03-05 03:07:00', 'Learn Docker, Docker Compose, Multi-Container Projects, Deployment and all about Kubernetes', '2023-03-05 03:07:06', '2023-03-31 03:07:09');
+INSERT INTO `seminar_detail` VALUES (15, 2, 'Deployment  ', '2023-02-06', '2023-02-06 10:52:45', 'Deployment and all about Kubernetes', '2023-01-27 22:55:28', '2023-02-27 22:55:28');
+INSERT INTO `seminar_detail` VALUES (16, 2, 'About Kubernetes', '2023-02-06', '2023-02-06 10:53:51', 'Deployment and all about Kubernetes', '2023-01-27 22:55:28', '2023-02-27 22:55:28');
+
+-- ----------------------------
+-- Table structure for seminar_detail_log
+-- ----------------------------
+DROP TABLE IF EXISTS `seminar_detail_log`;
+CREATE TABLE `seminar_detail_log`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `seminar_title_id` int(11) NULL DEFAULT NULL,
+  `title` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
+  `cteate` date NULL DEFAULT NULL,
+  `datetime` datetime NULL DEFAULT NULL,
+  `detail` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
+  `startdate` datetime NULL DEFAULT NULL,
+  `enddate` datetime NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of seminar_detail_log
+-- ----------------------------
+INSERT INTO `seminar_detail_log` VALUES (1, 1, '1. ทำความรู้จักการบริหารโครงการแบบ Agile ด้วยวิธี Scrum', '2023-02-27', '2023-02-27 22:55:28', 'เรียนจะเข้าใจเนื้อหาพื้นฐานที่สำคัญของ Agile ด้วยวิธี Scrum เพื่อเป็นแนวทางการพัฒนานวัตกรรมการทำงานและบริหารโครงการซอฟต์แวร์ที่ดีได้', '2023-02-27 22:55:28', '2023-02-27 22:55:28');
+INSERT INTO `seminar_detail_log` VALUES (2, 1, '2.สิ่งที่ต้องใช้ในการบริหารโครงการแบบ Agile ด้วยวิธี Scrum', '2023-02-06', '2023-02-06 10:57:47', '2.สิ่งที่ต้องใช้ในการบริหารโครงการแบบ Agile ด้วยวิธี Scrum', '2023-01-27 22:55:28', '2023-02-27 22:55:28');
+INSERT INTO `seminar_detail_log` VALUES (3, 1, '3. หน้าที่ของ Product Owner', '2023-02-27', '2023-02-27 22:55:28', 'เรียนจะเข้าใจเนื้อหาพื้นฐานที่สำคัญของ Agile ด้วยวิธี Scrum เพื่อเป็นแนวทางการพัฒนานวัตกรรมการทำงานและบริหารโครงการซอฟต์แวร์ที่ดีได้', '2023-02-27 22:55:28', '2023-02-27 22:55:28');
+INSERT INTO `seminar_detail_log` VALUES (4, 1, '4. หน้าที่ของ Scrum Master', '2023-02-27', '2023-02-27 22:55:28', 'เรียนจะเข้าใจเนื้อหาพื้นฐานที่สำคัญของ Agile ด้วยวิธี Scrum เพื่อเป็นแนวทางการพัฒนานวัตกรรมการทำงานและบริหารโครงการซอฟต์แวร์ที่ดีได้', '2023-02-27 22:55:28', '2023-02-27 22:55:28');
+INSERT INTO `seminar_detail_log` VALUES (5, 1, '5. หน้าที่ของ Scrum Team', '2023-02-27', '2023-02-27 22:55:28', 'เรียนจะเข้าใจเนื้อหาพื้นฐานที่สำคัญของ Agile ด้วยวิธี Scrum เพื่อเป็นแนวทางการพัฒนานวัตกรรมการทำงานและบริหารโครงการซอฟต์แวร์ที่ดีได้', '2023-02-27 22:55:28', '2023-02-27 22:55:28');
+INSERT INTO `seminar_detail_log` VALUES (6, 1, '6. ขั้นตอนที่ 1: Product Backlog', '2023-02-27', '2023-02-27 22:55:28', 'ผู้เรียนจะได้รับความเข้าใจอย่างถี่ถ้วนเกี่ยวกับเนื้อหาของ Agile ด้วยวิธี Scrum ตั้งแต่เริ่มต้นจนจบกระบวนการบริหารโครงการซอฟต์แวร์', '2023-02-27 22:55:28', '2023-02-27 22:55:28');
+INSERT INTO `seminar_detail_log` VALUES (7, 1, '7. ขั้นตอนที่ 2: Sprint Planning Meeting', '2023-02-27', '2023-02-27 22:55:28', 'ผู้เรียนจะได้รับความเข้าใจอย่างถี่ถ้วนเกี่ยวกับเนื้อหาของ Agile ด้วยวิธี Scrum ตั้งแต่เริ่มต้นจนจบกระบวนการบริหารโครงการซอฟต์แวร์', '2023-02-27 22:55:28', '2023-02-27 22:55:28');
+INSERT INTO `seminar_detail_log` VALUES (8, 1, '8. ขั้นตอนที่ 3: Sprint Backlog', '2023-02-27', '2023-02-27 22:55:28', 'ผู้เรียนจะได้เรียนรู้ตั้งแต่ความหมายของ Agile ด้วยวิธี Scrum ขั้นตอนการบริหารจัดการโครงการ หน้าที่ของทีม Scrum และเครื่องมือที่ใช้พัฒนานวัตกรรมการทำงานของ Scrum', '2023-02-27 22:55:28', '2023-02-27 22:55:28');
+INSERT INTO `seminar_detail_log` VALUES (9, 1, '9. ขั้นตอนที่ 4: Daily Scrum', '2023-02-27', '2023-02-27 22:55:28', 'ผู้เรียนจะได้เรียนรู้ตั้งแต่ความหมายของ Agile ด้วยวิธี Scrum ขั้นตอนการบริหารจัดการโครงการ หน้าที่ของทีม Scrum และเครื่องมือที่ใช้พัฒนานวัตกรรมการทำงานของ Scrum', '2023-02-27 22:55:28', '2023-02-27 22:55:28');
+INSERT INTO `seminar_detail_log` VALUES (10, 1, '10. ขั้นตอนที่ 5: Sprint Review', '2023-02-27', '2023-02-27 22:55:28', 'ผู้เรียนจะได้เรียนรู้ตั้งแต่ความหมายของ Agile ด้วยวิธี Scrum ขั้นตอนการบริหารจัดการโครงการ หน้าที่ของทีม Scrum และเครื่องมือที่ใช้พัฒนานวัตกรรมการทำงานของ Scrum', '2023-02-27 22:55:28', '2023-02-27 22:55:28');
+INSERT INTO `seminar_detail_log` VALUES (11, 1, '11. ขั้นตอนที่ 6: Sprint Retrospective', '2023-02-27', '2023-02-27 22:55:28', 'ผู้เรียนสามารถนำความรู้ของ Agile ด้วยวิธี Scrum ไปต่อยอดประยุกต์ใช้งานจริงของอาชีพวิศวกรซอฟต์แวร์ ผู้จัดการและผู้บริหารโครงการซอฟต์แวร์ได้', '2023-02-27 22:55:28', '2023-02-27 22:55:28');
+INSERT INTO `seminar_detail_log` VALUES (12, 1, '12. เครื่องมือ Scrum Task Board', '2023-02-27', '2023-02-27 22:55:28', 'ผู้เรียนสามารถนำความรู้ที่ได้ไปประยุกต์ใช้ทำ Software Projects หรือ Business Projects ต่าง ๆ ได้ ในการเรียนและการทำงานจริงได้', '2023-02-27 22:55:28', '2023-02-27 22:55:28');
+INSERT INTO `seminar_detail_log` VALUES (13, 1, '13. เครื่องมือ Burndown Chart', '2023-02-27', '2023-02-27 22:55:28', 'ผู้เรียนสามารถนำความรู้ที่ได้ไปประยุกต์ใช้ทำ Software Projects หรือ Business Projects ต่าง ๆ ได้ ในการเรียนและการทำงานจริงได้', '2023-02-27 22:55:28', '2023-02-27 22:55:28');
+INSERT INTO `seminar_detail_log` VALUES (14, 2, 'Learn Docker, Docker Compose, Multi-Container Projects, Deployment and all about Kubernetes', '2023-03-05', '2023-03-05 03:07:00', 'Learn Docker, Docker Compose, Multi-Container Projects, Deployment and all about Kubernetes', '2023-03-05 03:07:06', '2023-03-31 03:07:09');
+INSERT INTO `seminar_detail_log` VALUES (15, 2, 'Deployment  ', '2023-02-06', '2023-02-06 10:52:45', 'Deployment and all about Kubernetes', '2023-01-27 22:55:28', '2023-02-27 22:55:28');
+INSERT INTO `seminar_detail_log` VALUES (16, 2, 'About Kubernetes', '2023-02-06', '2023-02-06 10:53:51', 'Deployment and all about Kubernetes', '2023-01-27 22:55:28', '2023-02-27 22:55:28');
 
 -- ----------------------------
 -- Table structure for seminar_period
@@ -5445,14 +5483,40 @@ CREATE TABLE `seminar_title`  (
   `telephone` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
   `email` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of seminar_title
 -- ----------------------------
 INSERT INTO `seminar_title` VALUES (1, 'Agile & Scrum พัฒนานวัตกรรมการทำงานและบริหารโครงการ', 1, '2023-02-27 22:52:39', '2023-02-27 22:52:40', '2023-02-28 22:52:42', 'https://www.udemy.com/course/learnagilescrum/', 'Description\r\nหลักสูตร เรียน Agile & Scrum พัฒนานวัตกรรมการทำงานและบริหารโครงการ เรียนง่ายเป็นเร็ว Zero to Hero\r\n<br>\r\nสามารถเรียนได้ทุกคน ไม่จำเป็นต้องมีความรู้มาก่อน\r\n<br>\r\nเนื้อหาการเรียน Agile & Scrum พัฒนานวัตกรรมการทำงานและบริหารโครงการ\r\n<br>\r\nแบ่งเป็น 3 ส่วน\r\n<br>\r\nส่วนที่ 1: เรียน Agile ด้วยวิธี Scrum เพื่อพัฒนานวัตกรรมการทำงานและบริหารโครงการซอฟต์แวร์\r\n<br>\r\n1. ทำความรู้จักการบริหารโครงการแบบ Agile ด้วยวิธี Scrum\r\n<br>\r\n2. ส่ิงที่ต้องใช้ในการบริหารโครงการแบบ Agile ด้วยวิธี Scrum\r\n<br>\r\n3. หน้าที่ของ Product Owner\r\n<br>\r\n4. หน้าที่ของ Scrum Master\r\n<br>\r\n5. หน้าที่ของ Scrum Team\r\n<br>\r\n6. ขั้นตอนที่ 1: Product Backlog\r\n<br>\r\n7. ขั้นตอนที่ 2: Sprint Planning Meeting\r\n<br>\r\n8. ขั้นตอนที่ 3: Sprint Backlog\r\n<br>\r\n9. ขั้นตอนที่ 4: Daily Scrum\r\n<br>\r\n10. ขั้นตอนที่ 5: Sprint Review\r\n<br>\r\n11. ขั้นตอนที่ 6: Sprint Retrospective\r\n<br>\r\n12. เครื่องมือ Scrum Task Board\r\n<br>\r\n13. เครื่องมือ Burndown Chart\r\n<br>\r\nส่วนที่ 2: สรุปขั้นตอนการทำงานเพื่อพัฒนาโครงการซอฟต์แวร์แบบ Agile ด้วยวิธี Scrum\r\n<br>\r\n14. ทบทวนขั้นตอนการทำงานเพื่อพัฒนาโครงการแบบ Agile ด้วยวิธี Scrum\r\n<br>\r\nส่วนที่ 3: แบบฝึกหัดทบทวนการบริหารโครงการซอฟต์แวร์แบบ Agile ด้วยวิธี Scrum\r\n<br>\r\n15. 1. ข้อใดคือวิธีการพัฒนาซอฟต์แวร์ตามหลักการของ Agile\r\n<br>\r\n16. 2. วิธีการ Scrum เกิดขึ้นจาก Agile Software Development เพื่อช่วยเรื่องใด\r\n<br>\r\n17. 3. ใครคือบทบาทหลักของ Scrum\r\n<br>\r\n18. 4. ข้อใดกล่าวถูกต้องมากที่สุดเกี่ยวกับบทบาทของคนใน Scrum\r\n<br>\r\n19. 5. ข้อใดคือการทำงานของ Product Backlog\r\n<br>\r\n20. 6. ข้อใดคือการทำงานของ Sprint Planning Meeting\r\n<br>\r\n21. 7. ข้อใดคือการทำงานของ Sprint Backlog\r\n<br>\r\n22. 8. ข้อใดคือการทำงานของ Daily Scrum Meeting\r\n<br>\r\n23. 9. ข้อใดคือการทำงานของ Sprint Review Meeting\r\n<br>\r\nDescription\r\nหลักสูตร เรียน Agile & Scrum พัฒนานวัตกรรมการทำงานและบริหารโครงการ เรียนง่ายเป็นเร็ว Zero to Hero\r\n<br>\r\nสามารถเรียนได้ทุกคน ไม่จำเป็นต้องมีความรู้มาก่อน\r\n<br>\r\nเนื้อหาการเรียน Agile & Scrum พัฒนานวัตกรรมการทำงานและบริหารโครงการ\r\n<br>\r\nแบ่งเป็น 3 ส่วน\r\n<br>\r\nส่วนที่ 1: เรียน Agile ด้วยวิธี Scrum เพื่อพัฒนานวัตกรรมการทำงานและบริหารโครงการซอฟต์แวร์\r\n<br>\r\n1. ทำความรู้จักการบริหารโครงการแบบ Agile ด้วยวิธี Scrum\r\n<br>\r\n2. ส่ิงที่ต้องใช้ในการบริหารโครงการแบบ Agile ด้วยวิธี Scrum\r\n<br>\r\n3. หน้าที่ของ Product Owner\r\n<br>\r\n4. หน้าที่ของ Scrum Master\r\n<br>\r\n5. หน้าที่ของ Scrum Team\r\n<br>\r\n6. ขั้นตอนที่ 1: Product Backlog\r\n<br>\r\n7. ขั้นตอนที่ 2: Sprint Planning Meeting\r\n<br>\r\n8. ขั้นตอนที่ 3: Sprint Backlog\r\n<br>\r\n9. ขั้นตอนที่ 4: Daily Scrum\r\n<br>\r\n10. ขั้นตอนที่ 5: Sprint Review\r\n<br>\r\n11. ขั้นตอนที่ 6: Sprint Retrospective\r\n<br>\r\n12. เครื่องมือ Scrum Task Board\r\n<br>\r\n13. เครื่องมือ Burndown Chart\r\n<br>\r\nส่วนที่ 2: สรุปขั้นตอนการทำงานเพื่อพัฒนาโครงการซอฟต์แวร์แบบ Agile ด้วยวิธี Scrum\r\n<br>\r\n14. ทบทวนขั้นตอนการทำงานเพื่อพัฒนาโครงการแบบ Agile ด้วยวิธี Scrum\r\n<br>\r\nส่วนที่ 3: แบบฝึกหัดทบทวนการบริหารโครงการซอฟต์แวร์แบบ Agile ด้วยวิธี Scrum\r\n<br>\r\n15. 1. ข้อใดคือวิธีการพัฒนาซอฟต์แวร์ตามหลักการของ Agile\r\n<br>\r\n16. 2. วิธีการ Scrum เกิดขึ้นจาก Agile Software Development เพื่อช่วยเรื่องใด\r\n<br>\r\n17. 3. ใครคือบทบาทหลักของ Scrum\r\n<br>\r\n18. 4. ข้อใดกล่าวถูกต้องมากที่สุดเกี่ยวกับบทบาทของคนใน Scrum\r\n<br>\r\n19. 5. ข้อใดคือการทำงานของ Product Backlog\r\n<br>\r\n20. 6. ข้อใดคือการทำงานของ Sprint Planning Meeting\r\n<br>\r\n21. 7. ข้อใดคือการทำงานของ Sprint Backlog\r\n<br>\r\n22. 8. ข้อใดคือการทำงานของ Daily Scrum Meeting\r\n<br>\r\n23. 9. ข้อใดคือการทำงานของ Sprint Review Meeting\r\n<br>\r\n Sprint Retrospective Meeting', 2.5, 'Bangkok hotel WITH room for 1st', 'Bangkok ', '0955700354', 'kongnakornna@gmail.com');
 INSERT INTO `seminar_title` VALUES (2, 'Learn Docker, Docker Compose, Multi-Container Projects, Deployment and all about Kubernetes', 1, '2023-02-27 23:16:16', '2023-02-27 23:16:18', '2023-02-28 23:16:21', 'https://www.udemy.com/course/docker-kubernetes-the-practical-guide/', 'Learn Docker, Docker Compose, Multi-Container Projects, Deployment and all about Kubernetes from the ground up!', 4.5, 'Bangkok hotel WITH room for 1st', 'Bangkok ', '0955700354', 'kongnakornna@gmail.com');
-INSERT INTO `seminar_title` VALUES (4, 'test', 1, '2023-02-06 09:36:22', '2023-01-27 22:55:28', '2023-02-27 22:55:28', 'https://www.udemy.com/course/learnagilescrum/', 'Retrospective Meeting', 5, 'Bangkok Holtel', 'Bangkok', '0208365147', 'kongnkornna@gmail.com');
+
+-- ----------------------------
+-- Table structure for seminar_title_log
+-- ----------------------------
+DROP TABLE IF EXISTS `seminar_title_log`;
+CREATE TABLE `seminar_title_log`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
+  `narrator_id` int(11) NULL DEFAULT NULL,
+  `create` datetime NULL DEFAULT NULL,
+  `datetime_start` datetime NULL DEFAULT NULL,
+  `datetime_end` datetime NULL DEFAULT NULL,
+  `url` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
+  `detail` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
+  `spake_time` float NULL DEFAULT NULL,
+  `location` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
+  `province` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
+  `telephone` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of seminar_title_log
+-- ----------------------------
+INSERT INTO `seminar_title_log` VALUES (1, 'Agile & Scrum พัฒนานวัตกรรมการทำงานและบริหารโครงการ', 1, '2023-02-27 22:52:39', '2023-02-27 22:52:40', '2023-02-28 22:52:42', 'https://www.udemy.com/course/learnagilescrum/', 'Description\r\nหลักสูตร เรียน Agile & Scrum พัฒนานวัตกรรมการทำงานและบริหารโครงการ เรียนง่ายเป็นเร็ว Zero to Hero\r\n<br>\r\nสามารถเรียนได้ทุกคน ไม่จำเป็นต้องมีความรู้มาก่อน\r\n<br>\r\nเนื้อหาการเรียน Agile & Scrum พัฒนานวัตกรรมการทำงานและบริหารโครงการ\r\n<br>\r\nแบ่งเป็น 3 ส่วน\r\n<br>\r\nส่วนที่ 1: เรียน Agile ด้วยวิธี Scrum เพื่อพัฒนานวัตกรรมการทำงานและบริหารโครงการซอฟต์แวร์\r\n<br>\r\n1. ทำความรู้จักการบริหารโครงการแบบ Agile ด้วยวิธี Scrum\r\n<br>\r\n2. ส่ิงที่ต้องใช้ในการบริหารโครงการแบบ Agile ด้วยวิธี Scrum\r\n<br>\r\n3. หน้าที่ของ Product Owner\r\n<br>\r\n4. หน้าที่ของ Scrum Master\r\n<br>\r\n5. หน้าที่ของ Scrum Team\r\n<br>\r\n6. ขั้นตอนที่ 1: Product Backlog\r\n<br>\r\n7. ขั้นตอนที่ 2: Sprint Planning Meeting\r\n<br>\r\n8. ขั้นตอนที่ 3: Sprint Backlog\r\n<br>\r\n9. ขั้นตอนที่ 4: Daily Scrum\r\n<br>\r\n10. ขั้นตอนที่ 5: Sprint Review\r\n<br>\r\n11. ขั้นตอนที่ 6: Sprint Retrospective\r\n<br>\r\n12. เครื่องมือ Scrum Task Board\r\n<br>\r\n13. เครื่องมือ Burndown Chart\r\n<br>\r\nส่วนที่ 2: สรุปขั้นตอนการทำงานเพื่อพัฒนาโครงการซอฟต์แวร์แบบ Agile ด้วยวิธี Scrum\r\n<br>\r\n14. ทบทวนขั้นตอนการทำงานเพื่อพัฒนาโครงการแบบ Agile ด้วยวิธี Scrum\r\n<br>\r\nส่วนที่ 3: แบบฝึกหัดทบทวนการบริหารโครงการซอฟต์แวร์แบบ Agile ด้วยวิธี Scrum\r\n<br>\r\n15. 1. ข้อใดคือวิธีการพัฒนาซอฟต์แวร์ตามหลักการของ Agile\r\n<br>\r\n16. 2. วิธีการ Scrum เกิดขึ้นจาก Agile Software Development เพื่อช่วยเรื่องใด\r\n<br>\r\n17. 3. ใครคือบทบาทหลักของ Scrum\r\n<br>\r\n18. 4. ข้อใดกล่าวถูกต้องมากที่สุดเกี่ยวกับบทบาทของคนใน Scrum\r\n<br>\r\n19. 5. ข้อใดคือการทำงานของ Product Backlog\r\n<br>\r\n20. 6. ข้อใดคือการทำงานของ Sprint Planning Meeting\r\n<br>\r\n21. 7. ข้อใดคือการทำงานของ Sprint Backlog\r\n<br>\r\n22. 8. ข้อใดคือการทำงานของ Daily Scrum Meeting\r\n<br>\r\n23. 9. ข้อใดคือการทำงานของ Sprint Review Meeting\r\n<br>\r\nDescription\r\nหลักสูตร เรียน Agile & Scrum พัฒนานวัตกรรมการทำงานและบริหารโครงการ เรียนง่ายเป็นเร็ว Zero to Hero\r\n<br>\r\nสามารถเรียนได้ทุกคน ไม่จำเป็นต้องมีความรู้มาก่อน\r\n<br>\r\nเนื้อหาการเรียน Agile & Scrum พัฒนานวัตกรรมการทำงานและบริหารโครงการ\r\n<br>\r\nแบ่งเป็น 3 ส่วน\r\n<br>\r\nส่วนที่ 1: เรียน Agile ด้วยวิธี Scrum เพื่อพัฒนานวัตกรรมการทำงานและบริหารโครงการซอฟต์แวร์\r\n<br>\r\n1. ทำความรู้จักการบริหารโครงการแบบ Agile ด้วยวิธี Scrum\r\n<br>\r\n2. ส่ิงที่ต้องใช้ในการบริหารโครงการแบบ Agile ด้วยวิธี Scrum\r\n<br>\r\n3. หน้าที่ของ Product Owner\r\n<br>\r\n4. หน้าที่ของ Scrum Master\r\n<br>\r\n5. หน้าที่ของ Scrum Team\r\n<br>\r\n6. ขั้นตอนที่ 1: Product Backlog\r\n<br>\r\n7. ขั้นตอนที่ 2: Sprint Planning Meeting\r\n<br>\r\n8. ขั้นตอนที่ 3: Sprint Backlog\r\n<br>\r\n9. ขั้นตอนที่ 4: Daily Scrum\r\n<br>\r\n10. ขั้นตอนที่ 5: Sprint Review\r\n<br>\r\n11. ขั้นตอนที่ 6: Sprint Retrospective\r\n<br>\r\n12. เครื่องมือ Scrum Task Board\r\n<br>\r\n13. เครื่องมือ Burndown Chart\r\n<br>\r\nส่วนที่ 2: สรุปขั้นตอนการทำงานเพื่อพัฒนาโครงการซอฟต์แวร์แบบ Agile ด้วยวิธี Scrum\r\n<br>\r\n14. ทบทวนขั้นตอนการทำงานเพื่อพัฒนาโครงการแบบ Agile ด้วยวิธี Scrum\r\n<br>\r\nส่วนที่ 3: แบบฝึกหัดทบทวนการบริหารโครงการซอฟต์แวร์แบบ Agile ด้วยวิธี Scrum\r\n<br>\r\n15. 1. ข้อใดคือวิธีการพัฒนาซอฟต์แวร์ตามหลักการของ Agile\r\n<br>\r\n16. 2. วิธีการ Scrum เกิดขึ้นจาก Agile Software Development เพื่อช่วยเรื่องใด\r\n<br>\r\n17. 3. ใครคือบทบาทหลักของ Scrum\r\n<br>\r\n18. 4. ข้อใดกล่าวถูกต้องมากที่สุดเกี่ยวกับบทบาทของคนใน Scrum\r\n<br>\r\n19. 5. ข้อใดคือการทำงานของ Product Backlog\r\n<br>\r\n20. 6. ข้อใดคือการทำงานของ Sprint Planning Meeting\r\n<br>\r\n21. 7. ข้อใดคือการทำงานของ Sprint Backlog\r\n<br>\r\n22. 8. ข้อใดคือการทำงานของ Daily Scrum Meeting\r\n<br>\r\n23. 9. ข้อใดคือการทำงานของ Sprint Review Meeting\r\n<br>\r\n Sprint Retrospective Meeting', 2.5, 'Bangkok hotel WITH room for 1st', 'Bangkok ', '0955700354', 'kongnakornna@gmail.com');
+INSERT INTO `seminar_title_log` VALUES (2, 'Learn Docker, Docker Compose, Multi-Container Projects, Deployment and all about Kubernetes', 1, '2023-02-27 23:16:16', '2023-02-27 23:16:18', '2023-02-28 23:16:21', 'https://www.udemy.com/course/docker-kubernetes-the-practical-guide/', 'Learn Docker, Docker Compose, Multi-Container Projects, Deployment and all about Kubernetes from the ground up!', 4.5, 'Bangkok hotel WITH room for 1st', 'Bangkok ', '0955700354', 'kongnakornna@gmail.com');
 
 -- ----------------------------
 -- Table structure for seminarregister

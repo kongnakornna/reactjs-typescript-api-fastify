@@ -9,6 +9,7 @@ import { SdusersSeminarModel } from '../models/sd_users_seminar_model'
 import { SeminarDetailModel } from '../models/seminar_detail_model'
 import { SeminarTitleModel } from '../models/seminar_title_model'
 import { SeminarModels } from '../models/seminar_model'
+import { SeminarPeriodModel } from '../models/seminar_period_model'
 // Validator data by schemas
 import bodyemailSchema from '../schemas/bodyemail'
 import bodysinginSchema from '../schemas/bodysingin'
@@ -37,6 +38,7 @@ export default async function seminar(fastify: FastifyInstance) {
     const DetailModel = new SeminarDetailModel(); 
     const TitleModel = new SeminarTitleModel(); 
     const Seminar_Model = new SeminarModels(); 
+    const Seminar_Period_Model = new SeminarPeriodModel(); 
     const db: knex = fastify.db
     const multer = require('fastify-multer')
     const envPath = path.join(__dirname, '../../.env')
@@ -1293,9 +1295,9 @@ export default async function seminar(fastify: FastifyInstance) {
                     const id = query.id 
                     const validation_id: any = await TitleModel.check_data_by_id(db,id);
                     if (validation_id.length==0) {
-                                    reply.code(401).send({
+                                    reply.code(200).send({
                                                             response: { 
-                                                            message: "id not found", 
+                                                            message: "data not found", 
                                                             status: 0,  
                                                             StatusCode: '200',
                                                             }
@@ -1356,6 +1358,7 @@ export default async function seminar(fastify: FastifyInstance) {
                     const today = new Date() 
                     const seminar_title_id = body.seminar_title_id
                     const title = body.title  
+                    const detail = body.detail
                     const cteate =  Functions.timeConvertermas(today)
                     const datetime =  Functions.timeConvertermas(today) 
                     const startdate = body.startdate
@@ -1363,6 +1366,7 @@ export default async function seminar(fastify: FastifyInstance) {
                     const input: any = {} 
                     input.seminar_title_id=seminar_title_id; 
                     input.title = title;  
+                    input.detail = detail;  
                     input.cteate = cteate; 
                     input.datetime = datetime;   
                     input.startdate=startdate || null; 
@@ -1422,17 +1426,20 @@ export default async function seminar(fastify: FastifyInstance) {
                     const id = body.id
                     const seminar_title_id = body.seminar_title_id
                     const title = body.title  
+                    const detail = body.detail
                     const cteate =  Functions.timeConvertermas(today)
                     const datetime =  Functions.timeConvertermas(today) 
                     const startdate = body.startdate
                     const enddate = body.enddate  
                     const input: any = {} 
+                    input.id=id; 
                     input.seminar_title_id=seminar_title_id; 
                     input.title = title;  
+                    input.detail = detail;  
                     input.cteate = cteate; 
                     input.datetime = datetime;   
                     input.startdate=startdate || null; 
-                    input.enddate = enddate || null;   
+                    input.enddate = enddate || null;  
                     const rows: any = await DetailModel.update_by_id(db,id,input); 
                     reply.code(200).send({
                                         response: {
@@ -1486,12 +1493,12 @@ export default async function seminar(fastify: FastifyInstance) {
                     /*******************/  
                     const today = new Date() 
                     const createdate =  Functions.timeConvertermas(today)
-                    const id = body.id 
+                    const id = query.id 
                     const validation_id: any = await DetailModel.check_data_by_id(db,id);
                     if (validation_id.length==0) {
-                                    reply.code(401).send({
+                                    reply.code(200).send({
                                                             response: { 
-                                                            message: "Id not found", 
+                                                            message: "data not found", 
                                                             status: 0,  
                                                             StatusCode: '200',
                                                             }
@@ -1530,4 +1537,5 @@ export default async function seminar(fastify: FastifyInstance) {
                         return  // exit process    
             }           
     }) 
-} 
+    //seminar_period Seminar_Period_Model
+}  
