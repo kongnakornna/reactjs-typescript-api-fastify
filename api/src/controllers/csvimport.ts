@@ -65,7 +65,7 @@ export default async function csvimport(fastify: FastifyInstance) {
             },
             filename: (req: any, file: any, cb: any) => {
             const _ext = path.extname(file.originalname)  
-            const filename = 'sd_users_seminar1' + _ext
+            const filename = 'sd_users_seminar' + _ext
             cb(null, filename)
             }
     })
