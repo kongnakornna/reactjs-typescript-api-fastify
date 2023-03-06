@@ -2,12 +2,12 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
 import * as path from 'path'
 import * as knex from 'knex'
 import * as crypto from 'crypto'
+import csvToJson from 'csvtojson';
 const fs = require('fs');
 const envPath = path.join(__dirname, '../../../.env')
 require('dotenv').config({ path: envPath }) 
-const file_csv = path.join(__dirname, '../../../public/sd_users_seminar.csv')
 const filecsv = process.env.file_csv 
-
+const file_csv = path.join(__dirname, '../../../api/public/'+filecsv)
 import { UserModel } from '../models/user_model'
 import { FileModel } from '../models/file'
 import { SdusersNarratorModel } from '../models/sd_users_narrator_model'
@@ -81,7 +81,30 @@ export default async function csvimport(fastify: FastifyInstance) {
     function getErrorMessage(error: unknown) {
                 return toErrorWithMessage(error).message
     }
-    
+    function csvJSON(csvText: any) {
+            let lines: any = [];
+            const linesArray = csvText.split('\n');
+            // for trimming and deleting extra space 
+            linesArray.forEach((e: any) => {
+                const row = e.replace(/[\s]+[,]+|[,]+[\s]+/g, ',').trim();
+                lines.push(row);
+            });
+            // for removing empty record
+            lines.splice(lines.length - 1, 1);
+            const result = [];
+            const headers = lines[0].split(",");
+            for (let i = 1; i < lines.length; i++) {
+                const obj = [];
+                const currentline = lines[i].split(",");
+                for (let j = 0; j < headers.length; j++) {
+                obj[headers[j]] = currentline[j];
+                }
+                result.push(obj);
+            }
+            // return result; //JavaScript object
+            // return JSON.stringify(result); //JSON
+            return result;
+    }
     fastify.get('/', async (request: FastifyRequest, reply: FastifyReply) => {
             reply.header("Access-Control-Allow-Origin", "*");  
             reply.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); 
@@ -235,53 +258,259 @@ export default async function csvimport(fastify: FastifyInstance) {
                         return  // exit process   
                 }
     }) 
-    fastify.post('/readcsv',{schema: registerSchema},  async (request: FastifyRequest, reply: FastifyReply) => {
-                const reportError = ({message}: {message: string}) => {}
-                reply.header("Access-Control-Allow-Origin", "*");  
-                reply.header('Access-Control-Allow-Methods', 'POST'); 
-                const headers: any = request.headers || null;
-                const body: any = request.body;
-                const getchar: string =  Functions.getRandomchar(16);  
-                try { 
-                        const input: any = {} 
-                        //console.warn(`post `, post);             
-                        var filedata: any = file_csv;  
-                        console.warn(`filedata `, filedata);       
-                        let rawdata = fs.readFileSync(path.resolve(__dirname,filedata));
-                        console.log(`rawdata `, rawdata);  
-                        let filelog = JSON.parse(rawdata);
-                        reply.code(201).send({
-                                                response: { 
-                                                    message: "Register successful",
-                                                    status: 1,  
-                                                    rawdata:rawdata,
-                                                    filelog:filelog, 
-                                                    StatusCode: '201',
+    fastify.get('/readcsv',async (request: FastifyRequest, reply: FastifyReply) => {
+                    const reportError = ({message}: {message: string}) => {}
+                    reply.header("Access-Control-Allow-Origin", "*");  
+                    reply.header('Access-Control-Allow-Methods', 'POST'); 
+                    const headers: any = request.headers || null;
+                    const body: any = request.body;
+                    const input: any = {} 
+                    var filedata: any = file_csv;  
+                    console.warn(`filedata `, filedata);   
+                    const today = new Date()
+                    const dateTime = Functions.timeConvertermas(today);     
+                    try {    
+                            const json = await csvToJson().fromFile(path.resolve(__dirname,filedata));
+                            const jsonString = JSON.stringify(json, null, 2)
+                            let obj = JSON.parse(jsonString);
+                            console.log(jsonString);
+                            let tempData = [];
+                                for (const [key, value] of Object.entries(obj)) { 
+                                        const seminar_id: number = obj[key].seminar_id;  
+                                        const firstname: string = obj[key].firstname; 
+                                        const lastname: string = obj[key].lastname; 
+                                        const phonenumber: string = obj[key].phonenumber; 
+                                        const emails: string = obj[key].email; 
+                                        const create: string = dateTime;  // obj[key].create;// Functions.timeConvertermas(obj[key].create); 
+                                        const status: string = obj[key].status; 
+                                        const active: string = obj[key].active; 
+                                        const activedate: string = obj[key].activedate;
+                                        const password: string = obj[key].password;
+                                        const password_tem: string = obj[key].password_tem;   
+                                        let input: any = {}                                          
+                                            input.firstname = firstname; 
+                                            input.lastname = lastname; 
+                                            input.phonenumber = phonenumber; 
+                                            input.email = emails; 
+                                            input.create = create; 
+                                            input.status = status; 
+                                            input.active = active; 
+                                            input.activedate = activedate; 
+                                            input.password = password; 
+                                            input.password_tem = password_tem; 
+                                            const validation_email: any = await SeminarModel.validation_email(db, emails);
+                                            const validation_email_count: number =validation_email.length;                                            
+                                            if (validation_email_count > 0) { 
+                                                input.seminar_id = seminar_id; 
+                                                input.validation_email_count = validation_email_count; 
+                                                tempData.push(input); 
+                                            } else { 
+                                                tempData.push(input); 
+                                            }  
+                                }
+                            const resultData: any = tempData; 
+                            reply.code(200).send({
+                                                    response: { 
+                                                        message: "Readcsv successful",
+                                                        status: 1,  
+                                                        data:resultData,   
+                                                        StatusCode: '200',
+                                                    }
+                                        }) 
+                            return    
+
+                    } catch (error: any) { 
+                            reply.code(401).send({
+                                                response: {
+                                                    result: "Error",
+                                                    message: "Readcsv Unsuccessful!", 
+                                                    status: 1, 
+                                                    token: null,
+                                                    StatusCode: '401',
                                                 }
-                                    }) 
-                        return  // exit process    
-                } catch (error: any) { 
-                        reply.code(401).send({
-                                            response: {
-                                                result: "Error",
-                                                message: "Register Unsuccessful!", 
-                                                status: 1, 
-                                                token: null,
-                                                StatusCode: '401',
-                                            }
-                                    }) 
-                        return  // exit process    
-                }finally {
-                    reply.code(403).send({
-                                            response: {
-                                                result: "Error",
-                                                message: "Sign up Unsuccessful ,Error System something!", 
-                                                status: 1, 
-                                                token: null,
-                                                StatusCode: '403',
-                                            }
-                                    }) 
-                        return  // exit process   
-                }
+                                        }) 
+                            return  // exit process    
+                    }finally {
+                        reply.code(403).send({
+                                                response: {
+                                                    result: "Error",
+                                                    message: "Readcsv Unsuccessful ,Error System something!", 
+                                                    status: 1, 
+                                                    token: null,
+                                                    StatusCode: '403',
+                                                }
+                                        }) 
+                            return  // exit process   
+                    }
+    }) 
+    fastify.post('/readcsv',async (request: FastifyRequest, reply: FastifyReply) => {
+                    const reportError = ({message}: {message: string}) => {}
+                    reply.header("Access-Control-Allow-Origin", "*");  
+                    reply.header('Access-Control-Allow-Methods', 'POST'); 
+                    const headers: any = request.headers || null;
+                    const body: any = request.body;
+                    const input: any = {} 
+                    var filedata: any = file_csv;  
+                    console.warn(`filedata `, filedata);   
+                    const today = new Date()
+                    const dateTime = Functions.timeConvertermas(today);     
+                    try {    
+                            const json = await csvToJson().fromFile(path.resolve(__dirname,filedata));
+                            const jsonString = JSON.stringify(json, null, 2)
+                            let obj = JSON.parse(jsonString);
+                            console.log(jsonString);
+                            let tempData = [];
+                                for (const [key, value] of Object.entries(obj)) { 
+                                        const seminar_id: number = obj[key].seminar_id;  
+                                        const firstname: string = obj[key].firstname; 
+                                        const lastname: string = obj[key].lastname; 
+                                        const phonenumber: string = obj[key].phonenumber; 
+                                        const emails: string = obj[key].email; 
+                                        const create: string = dateTime;  // obj[key].create;// Functions.timeConvertermas(obj[key].create); 
+                                        const status: string = obj[key].status; 
+                                        const active: string = obj[key].active; 
+                                        const activedate: string = obj[key].activedate;
+                                        const password: string = obj[key].password;
+                                        const password_tem: string = obj[key].password_tem;   
+                                        let input: any = {}                                          
+                                            input.firstname = firstname; 
+                                            input.lastname = lastname; 
+                                            input.phonenumber = phonenumber; 
+                                            input.email = emails; 
+                                            input.create = create; 
+                                            input.status = status; 
+                                            input.active = active; 
+                                            input.activedate = activedate; 
+                                            input.password = password; 
+                                            input.password_tem = password_tem; 
+                                            const validation_email: any = await SeminarModel.validation_email(db, emails);
+                                            const validation_email_count: number =validation_email.length;                                            
+                                            if (validation_email_count > 0) { 
+                                                input.seminar_id = seminar_id; 
+                                                input.validation_email_count = validation_email_count; 
+                                                tempData.push(input); 
+                                            } else { 
+                                                tempData.push(input); 
+                                            }  
+                                }
+                            const resultData: any = tempData; 
+                            reply.code(200).send({
+                                                    response: { 
+                                                        message: "Readcsv successful",
+                                                        status: 1,  
+                                                        data:resultData,   
+                                                        StatusCode: '200',
+                                                    }
+                                        }) 
+                            return    
+
+                    } catch (error: any) { 
+                            reply.code(401).send({
+                                                response: {
+                                                    result: "Error",
+                                                    message: "Readcsv Unsuccessful!", 
+                                                    status: 1, 
+                                                    token: null,
+                                                    StatusCode: '401',
+                                                }
+                                        }) 
+                            return  // exit process    
+                    }finally {
+                        reply.code(403).send({
+                                                response: {
+                                                    result: "Error",
+                                                    message: "Readcsv Unsuccessful ,Error System something!", 
+                                                    status: 1, 
+                                                    token: null,
+                                                    StatusCode: '403',
+                                                }
+                                        }) 
+                            return  // exit process   
+                    }
+    }) 
+    fastify.post('/importuserbycsv',async (request: FastifyRequest, reply: FastifyReply) => {
+                    const reportError = ({message}: {message: string}) => {}
+                    reply.header("Access-Control-Allow-Origin", "*");  
+                    reply.header('Access-Control-Allow-Methods', 'POST'); 
+                    const headers: any = request.headers || null;
+                    const body: any = request.body;
+                    const input: any = {} 
+                    var filedata: any = file_csv;  
+                    console.warn(`filedata `, filedata);   
+                    const today = new Date()
+                    const dateTime = Functions.timeConvertermas(today);     
+                    try {    
+                            const json = await csvToJson().fromFile(path.resolve(__dirname,filedata));
+                            const jsonString = JSON.stringify(json, null, 2)
+                            let obj = JSON.parse(jsonString);
+                            console.log(jsonString);
+                            let tempData = [];
+                                for (const [key, value] of Object.entries(obj)) { 
+                                        const seminar_id: number = obj[key].seminar_id;  
+                                        const firstname: string = obj[key].firstname; 
+                                        const lastname: string = obj[key].lastname; 
+                                        const phonenumber: string = obj[key].phonenumber; 
+                                        const emails: string = obj[key].email; 
+                                        const create: string = dateTime;  // obj[key].create;// Functions.timeConvertermas(obj[key].create); 
+                                        const status: string = obj[key].status; 
+                                        const active: string = obj[key].active; 
+                                        const activedate: string = obj[key].activedate;
+                                        const password: string = obj[key].password;
+                                        const password_tem: string = obj[key].password_tem;   
+                                        let input: any = {}                                          
+                                            input.firstname = firstname; 
+                                            input.lastname = lastname; 
+                                            input.phonenumber = phonenumber; 
+                                            input.email = emails; 
+                                            input.create = create; 
+                                            input.status = status; 
+                                            input.active = active; 
+                                            input.activedate = activedate; 
+                                            input.password = password; 
+                                            input.password_tem = password_tem; 
+                                            const validation_email: any = await SeminarModel.validation_email(db, emails);
+                                            const validation_email_count: number =validation_email.length;                                            
+                                            if (validation_email_count > 0) { 
+                                                input.seminar_id = seminar_id; 
+                                                input.validation_email_count = validation_email_count; 
+                                                tempData.push(input); 
+                                            } else { 
+                                                tempData.push(input); 
+                                            }  
+                                }
+                            const resultData: any = tempData; 
+                            reply.code(200).send({
+                                                    response: { 
+                                                        message: "Readcsv successful",
+                                                        status: 1,  
+                                                        data:resultData,   
+                                                        StatusCode: '200',
+                                                    }
+                                        }) 
+                            return    
+
+                    } catch (error: any) { 
+                            reply.code(401).send({
+                                                response: {
+                                                    result: "Error",
+                                                    message: "Readcsv Unsuccessful!", 
+                                                    status: 1, 
+                                                    token: null,
+                                                    StatusCode: '401',
+                                                }
+                                        }) 
+                            return  // exit process    
+                    }finally {
+                        reply.code(403).send({
+                                                response: {
+                                                    result: "Error",
+                                                    message: "Readcsv Unsuccessful ,Error System something!", 
+                                                    status: 1, 
+                                                    token: null,
+                                                    StatusCode: '403',
+                                                }
+                                        }) 
+                            return  // exit process   
+                    }
     }) 
 }  
