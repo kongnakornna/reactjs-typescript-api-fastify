@@ -36,6 +36,7 @@ const Validator = new _Validator()
 const Functions = new _publicfunctions() 
 import {encode, decode} from 'string-encode-decode'
 /***********************/
+import { v4 as uuidv4 } from 'uuid';
 export default async function csvimport(fastify: FastifyInstance) {
     const userModel = new UserModel(); 
     const File_Model = new FileModel(); 
@@ -57,8 +58,34 @@ export default async function csvimport(fastify: FastifyInstance) {
     // console.warn(`port=>`,  port);  
     const APIKEY:any = env.API_KEY
     // console.warn(`APIKEY=>`, APIKEY);  
-    // console.warn(`env=>`, env);  
-    /***********************/
+    // console.warn(`env=>`, env);
+    /**********************/
+    var filedata: any = file_csv;  
+    const uploadPath = path.resolve(__dirname,filedata)
+    const storage = multer.diskStorage({
+        destination: (req: any, file: any, cb: any) => {
+        cb(null, uploadPath)
+        },
+        filename: (req: any, file: any, cb: any) => {
+        const _ext = path.extname(file.originalname) // .csv
+        const filename = uuidv4() + _ext
+        cb(null, filename)
+        }
+    })
+    const upload = multer({
+        storage,
+        limits: {
+        fileSize: 10000000000000000 * 1024 * 1024
+        },
+        fileFilter: (req: any, file: any, cb: any) => {
+        console.log('mimetype_file=>', file); 
+        if (file.mimetype !== 'csv') {
+            return cb(new Error('Invalid mimetype!'), false)
+        }
+        cb(null, true)
+        }
+    })
+    /**********************/
     type ErrorWithMessage = { message: string }
     function isErrorWithMessage(error: unknown): error is ErrorWithMessage {
             return (
@@ -428,7 +455,7 @@ export default async function csvimport(fastify: FastifyInstance) {
                             return  // exit process   
                     }
     }) 
-    fastify.post('/importuserbycsv',async (request: FastifyRequest, reply: FastifyReply) => {
+    fastify.post('/importuserbycsv',{ preHandler: upload.single('file')},async (request: FastifyRequest, reply: FastifyReply) => {
                     const reportError = ({message}: {message: string}) => {}
                     reply.header("Access-Control-Allow-Origin", "*");  
                     reply.header('Access-Control-Allow-Methods', 'POST'); 
@@ -438,7 +465,27 @@ export default async function csvimport(fastify: FastifyInstance) {
                     var filedata: any = file_csv;  
                     console.warn(`filedata `, filedata);   
                     const today = new Date()
-                    const dateTime = Functions.timeConvertermas(today);     
+                    const dateTime = Functions.timeConvertermas(today);    
+                    /*************/
+                    const file = request.file
+                    console.log('request=>',request); 
+                    console.log('file=>',file); 
+                    if (file === null) {
+                        reply.code(200).send({
+                                                response: { 
+                                                    message: "Please change file CSV!", 
+                                                    status: 0,  
+                                                    StatusCode: '200',
+                                                }
+                                            }) 
+                        return  // exit process  
+                    } 
+                    const fileInfo: any = {}
+                    fileInfo.originalname = file.originalname
+                    fileInfo.mimetype = file.mimetype
+                    fileInfo.filesize = file.size
+                    fileInfo.filename = file.filename
+                    console.log('fileInfo=>',fileInfo);    
                     try {    
                             const json = await csvToJson().fromFile(path.resolve(__dirname,filedata));
                             const jsonString = JSON.stringify(json, null, 2)
