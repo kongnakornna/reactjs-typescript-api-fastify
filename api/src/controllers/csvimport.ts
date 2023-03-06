@@ -2,12 +2,6 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
 import * as path from 'path'
 import * as knex from 'knex'
 import * as crypto from 'crypto'
-import csvToJson from 'csvtojson';
-const fs = require('fs');
-const envPath = path.join(__dirname, '../../../.env')
-require('dotenv').config({ path: envPath }) 
-const filecsv = process.env.file_csv 
-const file_csv = path.join(__dirname, '../../../api/public/'+filecsv)
 import { UserModel } from '../models/user_model'
 import { FileModel } from '../models/file'
 import { SdusersNarratorModel } from '../models/sd_users_narrator_model'
@@ -30,13 +24,15 @@ import query_string_titledelete from '../schemas/query_string_titledelete'
 import bodyseminar_detail from '../schemas/bodyseminar_detail'
 import singinseminaruserSchema from '../schemas/bodysinginseminaruser'
 var md5 = require('md5');
+import csvToJson from 'csvtojson';
+
+import { v4 as uuidv4 } from 'uuid';
+
 import { _publicfunctions } from '../utils/helpers/functions.helper';  
-import { _Validator } from '../utils/helpers/validator.helper';  
+import { _Validator } from '../utils/helpers/validator.helper';    
 const Validator = new _Validator() 
 const Functions = new _publicfunctions() 
 import {encode, decode} from 'string-encode-decode'
-/***********************/
-import { v4 as uuidv4 } from 'uuid';
 export default async function csvimport(fastify: FastifyInstance) {
     const userModel = new UserModel(); 
     const File_Model = new FileModel(); 
@@ -60,30 +56,25 @@ export default async function csvimport(fastify: FastifyInstance) {
     // console.warn(`APIKEY=>`, APIKEY);  
     // console.warn(`env=>`, env);
     /**********************/
+    const file_csv:any = env.file_csv
     var filedata: any = file_csv;  
-    const uploadPath = path.resolve(__dirname,filedata)
+    const uploadPaths: any = path.join(__dirname, '../../public');
     const storage = multer.diskStorage({
         destination: (req: any, file: any, cb: any) => {
-        cb(null, uploadPath)
-        },
-        filename: (req: any, file: any, cb: any) => {
-        const _ext = path.extname(file.originalname) // .csv
-        const filename = uuidv4() + _ext
-        cb(null, filename)
-        }
+            cb(null, uploadPaths)
+            },
+            filename: (req: any, file: any, cb: any) => {
+            const _ext = path.extname(file.originalname)  
+            const filename = 'sd_users_seminar1' + _ext
+            cb(null, filename)
+            }
     })
     const upload = multer({
-        storage,
-        limits: {
-        fileSize: 10000000000000000 * 1024 * 1024
-        },
-        fileFilter: (req: any, file: any, cb: any) => {
-        console.log('mimetype_file=>', file); 
-        if (file.mimetype !== 'csv') {
-            return cb(new Error('Invalid mimetype!'), false)
-        }
-        cb(null, true)
-        }
+            storage,
+            limits: {
+            fileSize: 99999 * 1024 * 1024
+                },
+                dest: uploadPaths
     })
     /**********************/
     type ErrorWithMessage = { message: string }
@@ -466,10 +457,10 @@ export default async function csvimport(fastify: FastifyInstance) {
                     console.warn(`filedata `, filedata);   
                     const today = new Date()
                     const dateTime = Functions.timeConvertermas(today);    
-                    /*************/
                     const file = request.file
                     console.log('request=>',request); 
                     console.log('file=>',file); 
+                    /*
                     if (file == null) {
                         reply.code(200).send({
                                                 response: { 
@@ -480,7 +471,7 @@ export default async function csvimport(fastify: FastifyInstance) {
                                             }) 
                         return  // exit process  
                     } 
-                    if (filedata == file.filename) {}else{
+                    if (filedata != file.filename) {}else{
                         reply.code(200).send({
                                                 response: { 
                                                     message: "Please change file CSV!", 
@@ -490,12 +481,15 @@ export default async function csvimport(fastify: FastifyInstance) {
                                             }) 
                         return  // exit process  
                     }  
-                    const fileInfo: any = {}
-                    fileInfo.originalname = file.originalname
-                    fileInfo.mimetype = file.mimetype
-                    fileInfo.filesize = file.size
-                    fileInfo.filename = file.filename
-                    console.log('fileInfo=>',fileInfo);    
+                    */
+                    /*
+                        const fileInfo: any = {}
+                        fileInfo.originalname = file.originalname
+                        fileInfo.mimetype = file.mimetype
+                        fileInfo.filesize = file.size
+                        fileInfo.filename = file.filename
+                        console.log('fileInfo=>',fileInfo);  
+                    */  
                     try {    
                             const json = await csvToJson().fromFile(path.resolve(__dirname,filedata));
                             const jsonString = JSON.stringify(json, null, 2)
@@ -546,14 +540,12 @@ export default async function csvimport(fastify: FastifyInstance) {
                                                     } 
                                                 await SeminarModel.create_data(db, inputs);
                                                 console.log("inputs", inputs) 
-                                                 
                                                 let idxs: any = await SeminarModel.last_seminar_id(db);
                                                 const luser: any = idxs[0]
                                                 console.log("luser", luser); 
                                                 let idx: Number = luser.seminar_id;
                                                 console.log("inputs", inputs) 
                                                 console.log("idx", idx); 
-                                                 
                                                 tempData.push(inputs); 
                                             }  
                                 }

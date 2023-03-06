@@ -30,8 +30,7 @@ app.register(require('fastify-cors'), {
   methods: "GET,POST,OPTIONS,PUT,DELETE,PATCH"    
 }) 
 app.register(require('fastify-formbody'))
- 
-
+// app.register(fileUpload)
 // register knex database
 app.register(require('./plugins/mysqldb'), {
   options: {
