@@ -470,7 +470,7 @@ export default async function csvimport(fastify: FastifyInstance) {
                     const file = request.file
                     console.log('request=>',request); 
                     console.log('file=>',file); 
-                    if (file === null) {
+                    if (file == null) {
                         reply.code(200).send({
                                                 response: { 
                                                     message: "Please change file CSV!", 
@@ -480,6 +480,16 @@ export default async function csvimport(fastify: FastifyInstance) {
                                             }) 
                         return  // exit process  
                     } 
+                    if (filedata == file.filename) {}else{
+                        reply.code(200).send({
+                                                response: { 
+                                                    message: "Please change file CSV!", 
+                                                    status: 0,  
+                                                    StatusCode: '200',
+                                                }
+                                            }) 
+                        return  // exit process  
+                    }  
                     const fileInfo: any = {}
                     fileInfo.originalname = file.originalname
                     fileInfo.mimetype = file.mimetype
@@ -557,7 +567,6 @@ export default async function csvimport(fastify: FastifyInstance) {
                                                     }
                                         }) 
                             return    
-
                     } catch (error: any) { 
                             reply.code(401).send({
                                                 response: {
