@@ -1772,7 +1772,9 @@ export default async function seminar(fastify: FastifyInstance) {
                         const title:string = ResultArray[key].title_name;
                         const title_url: string = ResultArray[key].title_url; 
                         const narrator_fullname: string = ResultArray[key].narrator_fullname;  
-                        const narrator_nickname: string = ResultArray[key].narrator_nickname;  
+                        const narrator_nickname: string = ResultArray[key].narrator_firstname;  
+                        const narrator_firstname: string = ResultArray[key].narrator_firstname;  
+                        const narrator_lastname: string = ResultArray[key].narrator_lastname;  
                         const seminar_id: string = ResultArray[key].seminar_id;  
                         const startdate: string = Functions.timeConvertermas(ResultArray[key].startdate);  
                         const enddate: string = Functions.timeConvertermas(ResultArray[key].enddate); 
@@ -1786,11 +1788,9 @@ export default async function seminar(fastify: FastifyInstance) {
                                     title_url: title_url, 
                                     start: startdate, 
                                     end: enddate,
-                                    narrator_fullname: narrator_fullname, 
-                                    narrator_nickname: narrator_nickname, 
+                                    narrator: narrator_firstname+' '+narrator_lastname, 
                                     seminar_id: seminar_id, 
-                                    firstname_seminar: firstname_seminar, 
-                                    lastname_seminar: lastname_seminar, 
+                                    seminar: firstname_seminar+' '+lastname_seminar, 
                                     phonenumber_seminar: phonenumber_seminar, 
                                     email_seminar: email_seminar, 
                                 } 

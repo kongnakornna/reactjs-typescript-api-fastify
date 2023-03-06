@@ -179,7 +179,9 @@ export class SeminarPeriodModel {
                         query = query.select('t.datetime_end as enddate');  
                         //query = query.select("CONCAT(u.firstname,' ',u.lastname) as narrator_name");
                         query = query.select('u.fullname as narrator_fullname');   
-                        query = query.select('u.nickname as narrator_nickname');     
+                        query = query.select('u.nickname as narrator_nickname'); 
+                        query = query.select('u.firstname as narrator_firstname'); 
+                        query = query.select('u.lastname as narrator_lastname');     
                         query = query.select('us.seminar_id as seminar_id'); 
                         query = query.select('us.firstname as firstname_seminar'); 
                         query = query.select('us.lastname as lastname_seminar'); 
@@ -273,7 +275,9 @@ export class SeminarPeriodModel {
                         query = query.select('t.datetime_end as enddate');  
                         //query = query.select("CONCAT(u.firstname,' ',u.lastname) as narrator_name");
                         query = query.select('u.fullname as narrator_fullname');   
-                        query = query.select('u.nickname as narrator_nickname');     
+                        query = query.select('u.nickname as narrator_nickname'); 
+                        query = query.select('u.firstname as narrator_firstname'); 
+                        query = query.select('u.lastname as narrator_lastname'); 
                         query = query.select('us.seminar_id as seminar_id'); 
                         query = query.select('us.firstname as firstname_seminar'); 
                         query = query.select('us.lastname as lastname_seminar'); 
