@@ -285,10 +285,18 @@ export default async function csvimport(fastify: FastifyInstance) {
                     const input: any = {} 
                     var filedata: any = file_csv;  
                     console.warn(`filedata `, filedata);   
+                    const uploadPaths: any = path.join(__dirname, '../../public'); 
+                    console.warn(`uploadPaths `, uploadPaths); 
                     const today = new Date()
-                    const dateTime = Functions.timeConvertermas(today);     
+                    const dateTime = Functions.timeConvertermas(today);    
+                    const json = await csvToJson().fromFile(path.resolve(uploadPaths,filedata));
+                    console.warn(`json `, json); 
+                    const jsonString = JSON.stringify(json, null, 2)
+                    let obj = JSON.parse(jsonString);
+                    console.warn(`obj `, obj);   
                     try {    
-                            const json = await csvToJson().fromFile(path.resolve(__dirname,filedata));
+                           //const uploadPaths: any = path.join(__dirname, '../../public'); 
+                            const json = await csvToJson().fromFile(path.resolve(uploadPaths,filedata));
                             const jsonString = JSON.stringify(json, null, 2)
                             let obj = JSON.parse(jsonString);
                             console.log(jsonString);
@@ -370,10 +378,18 @@ export default async function csvimport(fastify: FastifyInstance) {
                     const input: any = {} 
                     var filedata: any = file_csv;  
                     console.warn(`filedata `, filedata);   
+                    const uploadPaths: any = path.join(__dirname, '../../public'); 
+                    console.warn(`uploadPaths `, uploadPaths); 
                     const today = new Date()
-                    const dateTime = Functions.timeConvertermas(today);     
+                    const dateTime = Functions.timeConvertermas(today);    
+                    const json = await csvToJson().fromFile(path.resolve(uploadPaths,filedata));
+                    console.warn(`json `, json); 
+                    const jsonString = JSON.stringify(json, null, 2)
+                    let obj = JSON.parse(jsonString);
+                    console.warn(`obj `, obj);   
                     try {    
-                            const json = await csvToJson().fromFile(path.resolve(__dirname,filedata));
+                            const uploadPaths: any = path.join(__dirname, '../../public'); 
+                            const json = await csvToJson().fromFile(path.resolve(uploadPaths,filedata));
                             const jsonString = JSON.stringify(json, null, 2)
                             let obj = JSON.parse(jsonString);
                             console.log(jsonString);
@@ -454,7 +470,9 @@ export default async function csvimport(fastify: FastifyInstance) {
                     const body: any = request.body;
                     const input: any = {} 
                     var filedata: any = file_csv;  
+                    const uploadPaths: any = path.join(__dirname, '../../public');
                     console.warn(`filedata `, filedata);   
+                    console.warn(`uploadPaths `, uploadPaths);   
                     const today = new Date()
                     const dateTime = Functions.timeConvertermas(today);    
                     const file = request.file
@@ -491,7 +509,9 @@ export default async function csvimport(fastify: FastifyInstance) {
                         console.log('fileInfo=>',fileInfo);  
                     */  
                     try {    
-                            const json = await csvToJson().fromFile(path.resolve(__dirname,filedata));
+                            const uploadPaths: any = path.join(__dirname, '../../public'); 
+                            const json = await csvToJson().fromFile(path.resolve(uploadPaths,filedata));
+                            //const json = await csvToJson().fromFile(path.resolve(__dirname,filedata));
                             const jsonString = JSON.stringify(json, null, 2)
                             let obj = JSON.parse(jsonString);
                             console.log(jsonString);
