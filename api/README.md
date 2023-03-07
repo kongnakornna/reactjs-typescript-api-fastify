@@ -154,7 +154,7 @@ Overall, the software development team is most efficient and effective. The soft
 
 - Run `pm2 start server.js --name "apiapp" ` #  ติดตั้ง service apiapp ใหม่ บน pm2
 # ############## How to Run PM2 on windows 
-- Run `I: D:\nodejsapp\reactjs-typescript-api-fastify\api\dist`
+- Run `D:\nodejsapp\reactjs-typescript-api-fastify\api\dist`
 - Run `cd D:\nodejsapp\reactjs-typescript-api-fastify\api`   # I:\app\snmpapiv2
 - Run `pm2 list` # ดูว่า มี service ไหม
 - Run `pm2 delete apiapp ` #  ลบ service cmonapp ออก จาก pm2
