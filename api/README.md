@@ -172,9 +172,8 @@ $ pm2 delete app_name
 
 
 
-# ************************
-# Fastify เน้นความเร็ว ในการ  
-# DIY  วางโครงสร้างเอง 
+-- ************************
+-- Fastify เน้นความเร็ว ในการ  
 -- https://www.fastify.io/benchmarks
 -การสร้าง RESTful API `(Application Programming Interface) `ด้วย `Fastify`
 -Run `npm i fastify` 
@@ -232,22 +231,3 @@ $ pm2 delete app_name
 ---- function.helper
 
 
-# ************************
--การใช้งาน SocketIO
---Plugins SocketIO
--การใช้งาน WebSocket
---Plugins WebSocket
--การอัปโหลดไฟล์
---fastify-multer
---mime-types
---fs-extra
---path
---fs
- 
-
-# https://www.npmjs.com/package/convert-csv-to-json
-# https://github.com/huangang/fastify-file-upload
-# https://github.com/greguz/fastify-kubernetes
-# https://github.com/love-lena/fastify-mqtt
-# https://www.npmjs.com/package/minipass-pipeline
-# https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-docker-registry
