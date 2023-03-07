@@ -122,7 +122,7 @@ export default async function login(fastify: FastifyInstance) {
         } 
       }
   })
-  fastify.post('/verifylogin', {preValidation: [fastify.authenticate]/*สรวจสอบ Tokem*/}, async (request: FastifyRequest, reply: FastifyReply) => {
+  fastify.post('/verifylogin', {preValidation: [fastify.authenticate]/*ตรวจสอบ Tokem*/}, async (request: FastifyRequest, reply: FastifyReply) => {
     const headers: any = request.headers;           
     const body: any = request.body;   
     const host: any = headers.host;  

@@ -271,7 +271,7 @@ export default async function seminar(fastify: FastifyInstance) {
              }    
              
     })
-    fastify.post('/verifytoken', {preValidation: [fastify.authenticate]/*สรวจสอบ Tokem*/}, async (request: FastifyRequest, reply: FastifyReply) => {
+    fastify.post('/verifytoken', {preValidation: [fastify.authenticate]/*ตรวจสอบ Tokem*/}, async (request: FastifyRequest, reply: FastifyReply) => {
             const headers: any = request.headers;           
             const body: any = request.body;   
             const host: any = headers.host;  
