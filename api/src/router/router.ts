@@ -7,6 +7,7 @@ import seminarRouter from '../controllers/seminar'
 import seminaruserRouter from '../controllers/seminaruser'
 import narratorRouter from '../controllers/narrator' 
 import csvimportRouter from '../controllers/csvimport'
+import employeesRouter from '../controllers/employees'
 export default async function router(fastify: FastifyInstance) {
   // router prefix
   fastify.register(indexRouter, { prefix: '/' }) 
@@ -17,4 +18,5 @@ export default async function router(fastify: FastifyInstance) {
   fastify.register(seminaruserRouter, { prefix: '/seminaruser' })
   fastify.register(narratorRouter, { prefix: '/narrator' })
   fastify.register(csvimportRouter, { prefix: '/csvimport' })
+  fastify.register(employeesRouter, { prefix: '/employees' })
 }
