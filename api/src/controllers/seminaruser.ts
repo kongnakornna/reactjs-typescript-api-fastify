@@ -246,19 +246,7 @@ export default async function seminaruser(fastify: FastifyInstance) {
                     })
                     return  // exit process  
                 }
-             try {
-             } catch (error: any) { 
-                            reply.code(401).send({
-                                                response: {
-                                                    result: "Error",
-                                                    message: "Error!", 
-                                                    status: 1, 
-                                                    token: null,
-                                                    StatusCode: '401',
-                                                }
-                                        }) 
-                            return  // exit process    
-             }    
+             
              
         })
         fastify.post('/verifytoken', {preValidation: [fastify.authenticate]/*ตรวจสอบ Tokem*/}, async (request: FastifyRequest, reply: FastifyReply) => {
